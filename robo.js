@@ -39,11 +39,11 @@ function runMotor(lmotor, lspeed, rmotor, rspeed) {
   var modspeed = Math.floor(lspeed*SPEED_MOD);
   // sends a message to the Python script via stdin
   pyshell.send(JSON.stringify({left: {motor: lmotor, speed: modspeed}, right: {motor: rmotor, speed: rspeed}}));
-
-  // end the input stream and allow the process to exit
-  pyshell.end(function (err) {
-    if (err) throw err;
-  });
+  // 
+  // // end the input stream and allow the process to exit
+  // pyshell.end(function (err) {
+  //   if (err) throw err;
+  // });
 }
 
 module.exports = {
