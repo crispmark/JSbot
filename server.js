@@ -45,8 +45,8 @@ var STREAM_PORT = 8082,
 	WEBSOCKET_PORT = 8084,
 	STREAM_MAGIC_BYTES = 'jsmp'; // Must be 4 bytes
 
-var width = 1280,
-	height = 720;
+var width = 640,
+	height = 480;
 
 var socketServer = new(require('ws').Server)({
 	port: WEBSOCKET_PORT
