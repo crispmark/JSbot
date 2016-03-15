@@ -3,7 +3,7 @@ var exec = require('child_process').exec;
 
 function execute(port, secret) {
   var command = `ffmpeg -s 640x480 -f video4linux2 -i /dev/video0 \
-  -vf "transpose=2,transpose=2"-f mpeg1video -b:v 800k -r 30 \
+  -vf "transpose=2,transpose=2" -f mpeg1video -b:v 800k -r 30 \
   http://localhost:${port}/${secret}`;
 
   exec(command,
