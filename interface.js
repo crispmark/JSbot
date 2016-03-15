@@ -122,6 +122,12 @@ var ButtonInterface = React.createClass({
   }
 });
 
+//create the header for the webpage
+function createHeader() {
+  return (
+    <div></div>
+  )
+}
 
 //create button to move robot forward
 function createTopButton(activeCommand) {
