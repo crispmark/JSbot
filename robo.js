@@ -3,7 +3,7 @@ const command = require('./robo-commands.js');
 
 const SPEED = 128;
 const TURN_SPEED = 128;
-const SPEED_MOD = 0.98;
+const SPEED_MOD = 0.975;
 //the time at which the last command was received
 var lastCommand = -Infinity;
 
