@@ -3,6 +3,7 @@ const command = require('./robo-commands.js');
 
 const SPEED = 128;
 const TURN_SPEED = 128;
+const SPEED_MOD = 0.98;
 //the time at which the last command was received
 var lastCommand = -Infinity;
 
@@ -34,8 +35,9 @@ function runMotor(lmotor, lspeed, rmotor, rspeed) {
   var pyshell = new PythonShell('./motorControl.py', {
     pythonPath: 'python2',
   });
+  var modspeed = Math.floor(rspeed*0.5);
   // sends a message to the Python script via stdin
-  pyshell.send(JSON.stringify({left: {motor: lmotor, speed: lspeed}, right: {motor: rmotor, speed: rspeed}}));
+  pyshell.send(JSON.stringify({left: {motor: lmotor, speed: lspeed}, right: {motor: rmotor, speed: modspeed}}));
 
   // end the input stream and allow the process to exit
   pyshell.end(function (err) {
