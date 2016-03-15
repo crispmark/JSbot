@@ -31,10 +31,11 @@ function runCommand (msg) {
   }
 }
 
+var pyshell = new PythonShell('./motorControl.py', {
+  pythonPath: 'python2',
+});
+
 function runMotor(lmotor, lspeed, rmotor, rspeed) {
-  var pyshell = new PythonShell('./motorControl.py', {
-    pythonPath: 'python2',
-  });
   var modspeed = Math.floor(lspeed*SPEED_MOD);
   // sends a message to the Python script via stdin
   pyshell.send(JSON.stringify({left: {motor: lmotor, speed: modspeed}, right: {motor: rmotor, speed: rspeed}}));
