@@ -163,22 +163,53 @@
 	    var rightButton = createRightButton.call(this, activeCommand);
 	    return _react2.default.createElement(
 	      'div',
-	      { className: 'allButtons' },
+	      null,
 	      _react2.default.createElement(
-	        'div',
-	        { className: 'topButton' },
-	        topButton
+	        'canvas',
+	        { id: 'videoCanvas', width: '640', height: '480' },
+	        _react2.default.createElement(
+	          'p',
+	          null,
+	          'Please use a browser that supports the Canvas Element, like',
+	          _react2.default.createElement(
+	            'a',
+	            { href: 'http://www.google.com/chrome' },
+	            'Chrome'
+	          ),
+	          ',',
+	          _react2.default.createElement(
+	            'a',
+	            { href: 'http://www.mozilla.com/firefox/' },
+	            'Firefox'
+	          ),
+	          ',',
+	          _react2.default.createElement(
+	            'a',
+	            { href: 'http://www.apple.com/safari/' },
+	            'Safari'
+	          ),
+	          ' or Internet Explorer 10'
+	        )
 	      ),
 	      _react2.default.createElement(
 	        'div',
-	        { className: 'sideButtons' },
-	        leftButton,
-	        rightButton
-	      ),
-	      _react2.default.createElement(
-	        'div',
-	        { className: 'bottomButton' },
-	        bottomButton
+	        { className: 'allButtons' },
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'topButton' },
+	          topButton
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'sideButtons' },
+	          leftButton,
+	          rightButton
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'bottomButton' },
+	          bottomButton
+	        )
 	      )
 	    );
 	  }
