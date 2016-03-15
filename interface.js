@@ -96,15 +96,6 @@ var ButtonInterface = React.createClass({
     var rightButton = createRightButton.call(this, activeCommand);
     var header = createHeader();
     return (
-      <div>
-        <canvas id="videoCanvas" width="640" height="480">
-          <p>
-            Please use a browser that supports the Canvas Element, like
-            <a href="http://www.google.com/chrome">Chrome</a>,
-            <a href="http://www.mozilla.com/firefox/">Firefox</a>,
-            <a href="http://www.apple.com/safari/">Safari</a> or Internet Explorer 10
-          </p>
-        </canvas>
         <div className="allButtons">
           <div className="topButton">
             {topButton}
@@ -117,10 +108,30 @@ var ButtonInterface = React.createClass({
             {bottomButton}
           </div>
         </div>
-      </div>
     );
   }
 });
+
+//creates the main page
+function createPage() {
+  var header = createHeader();
+  return (
+    <div>
+      {header}
+      <main>
+        <canvas id="videoCanvas" width="640" height="480">
+          <p>
+            Please use a browser that supports the Canvas Element, like
+            <a href="http://www.google.com/chrome">Chrome</a>,
+            <a href="http://www.mozilla.com/firefox/">Firefox</a>,
+            <a href="http://www.apple.com/safari/">Safari</a> or Internet Explorer 10
+          </p>
+        </canvas>
+        <ButtonInterface />
+      </main>
+    </div>
+  )
+}
 
 //create the header for the webpage
 function createHeader() {
@@ -183,4 +194,4 @@ function getDirectionFromKey(key) {
 }
 
 // adds buttons to DOM
-ReactDOM.render(<div> <ButtonInterface /> </div>, document.getElementById('container'));
+ReactDOM.render(createPage(), document.getElementById('container'));

@@ -161,8 +161,39 @@
 	    var bottomButton = createBottomButton.call(this, activeCommand);
 	    var leftButton = createLeftButton.call(this, activeCommand);
 	    var rightButton = createRightButton.call(this, activeCommand);
+	    var header = createHeader();
 	    return _react2.default.createElement(
 	      'div',
+	      { className: 'allButtons' },
+	      _react2.default.createElement(
+	        'div',
+	        { className: 'topButton' },
+	        topButton
+	      ),
+	      _react2.default.createElement(
+	        'div',
+	        { className: 'sideButtons' },
+	        leftButton,
+	        rightButton
+	      ),
+	      _react2.default.createElement(
+	        'div',
+	        { className: 'bottomButton' },
+	        bottomButton
+	      )
+	    );
+	  }
+	});
+	
+	//creates the main page
+	function createPage() {
+	  var header = createHeader();
+	  return _react2.default.createElement(
+	    'div',
+	    null,
+	    header,
+	    _react2.default.createElement(
+	      'main',
 	      null,
 	      _react2.default.createElement(
 	        'canvas',
@@ -191,29 +222,15 @@
 	          ' or Internet Explorer 10'
 	        )
 	      ),
-	      _react2.default.createElement(
-	        'div',
-	        { className: 'allButtons' },
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'topButton' },
-	          topButton
-	        ),
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'sideButtons' },
-	          leftButton,
-	          rightButton
-	        ),
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'bottomButton' },
-	          bottomButton
-	        )
-	      )
-	    );
-	  }
-	});
+	      _react2.default.createElement(ButtonInterface, null)
+	    )
+	  );
+	}
+	
+	//create the header for the webpage
+	function createHeader() {
+	  return _react2.default.createElement('div', null);
+	}
 	
 	//create button to move robot forward
 	function createTopButton(activeCommand) {
@@ -276,7 +293,7 @@
 	}
 	
 	// adds buttons to DOM
-	_reactDom2.default.render(_react2.default.createElement(ButtonInterface, null), document.getElementById('container'));
+	_reactDom2.default.render(createPage(), document.getElementById('container'));
 
 /***/ },
 /* 2 */
