@@ -12,10 +12,10 @@ function runCommand (msg) {
     lastCommand = msg.time;
     switch(msg.command) {
       case command.FORWARD:
-      runMotor(1, SPEED, 2, SPEED);
+      runMotor(1, -SPEED, 2, -SPEED);
       break;
       case command.REVERSE:
-      runMotor(1, -SPEED, 2, -SPEED);
+      runMotor(1, SPEED, 2, SPEED);
       break;
       case command.TURN_LEFT:
       runMotor(1, -TURN_SPEED, 2, TURN_SPEED);
