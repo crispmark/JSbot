@@ -94,6 +94,7 @@ var ButtonInterface = React.createClass({
     var bottomButton = createBottomButton.call(this, activeCommand);
     var leftButton = createLeftButton.call(this, activeCommand);
     var rightButton = createRightButton.call(this, activeCommand);
+    var header = createHeader();
     return (
       <div>
         <canvas id="videoCanvas" width="640" height="480">
@@ -176,4 +177,4 @@ function getDirectionFromKey(key) {
 }
 
 // adds buttons to DOM
-ReactDOM.render(<ButtonInterface />, document.getElementById('container'));
+ReactDOM.render(<div> <ButtonInterface /> </div>, document.getElementById('container'));
