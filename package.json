@@ -1,0 +1,40 @@
+{
+  "name": "robo-interface",
+  "version": "1.0.0",
+  "description": "interface for interacting with robot tank",
+  "main": "interface.js",
+  "scripts": {
+    "start": "nodemon server.js -i public/ & webpack --watch --progress",
+    "test": "node robo.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/crispmark/robo-interface.git"
+  },
+  "author": "Mark <macr1324@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/crispmark/robo-interface/issues"
+  },
+  "homepage": "https://github.com/crispmark/robo-interface#readme",
+  "dependencies": {
+    "babel": "^6.5.2",
+    "babel-core": "^6.6.5",
+    "babel-loader": "^6.2.4",
+    "babel-preset-es2015": "^6.6.0",
+    "babel-preset-react": "^6.5.0",
+    "express": "^4.13.4",
+    "johnny-five": "^0.9.30",
+    "jsmpeg": "^1.0.0",
+    "python-shell": "^0.4.0",
+    "raspi-io": "^5.4.1",
+    "react": "^0.14.7",
+    "react-dom": "^0.14.7",
+    "secure-random": "^1.1.1",
+    "socket.io": "^1.4.5",
+    "socket.io-client": "^1.4.5",
+    "ws": "^1.0.1",
+    "wss": "^0.0.2"
+  }
+
+}
