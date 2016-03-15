@@ -1,7 +1,7 @@
 const PythonShell = require('python-shell');
 const command = require('./robo-commands.js');
 
-const SPEED = 64;
+const SPEED = 128;
 const TURN_SPEED = 64;
 //the time at which the last command was received
 var lastCommand = -Infinity;
@@ -18,10 +18,10 @@ function runCommand (msg) {
       runMotor(1, -SPEED, 2, -SPEED);
       break;
       case command.TURN_LEFT:
-      runMotor(1, TURN_SPEED, 2, -TURN_SPEED);
+      runMotor(1, -TURN_SPEED, 2, TURN_SPEED);
       break;
       case command.TURN_RIGHT:
-      runMotor(1, -TURN_SPEED, 2, TURN_SPEED);
+      runMotor(1, TURN_SPEED, 2, -TURN_SPEED);
       break;
       case command.STOP:
       runMotor(1, 0, 2, 0);
