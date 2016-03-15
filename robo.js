@@ -1,7 +1,7 @@
 const PythonShell = require('python-shell');
 const command = require('./robo-commands.js');
 
-const SPEED = 225;
+const SPEED = 128;
 const TURN_SPEED = 128;
 //the time at which the last command was received
 var lastCommand = -Infinity;
