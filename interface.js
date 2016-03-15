@@ -95,16 +95,26 @@ var ButtonInterface = React.createClass({
     var leftButton = createLeftButton.call(this, activeCommand);
     var rightButton = createRightButton.call(this, activeCommand);
     return (
-      <div className="allButtons">
-        <div className="topButton">
-          {topButton}
-        </div>
-        <div className="sideButtons">
-          {leftButton}
-          {rightButton}
-        </div>
-        <div className="bottomButton">
-          {bottomButton}
+      <div>
+        <canvas id="videoCanvas" width="640" height="480">
+          <p>
+            Please use a browser that supports the Canvas Element, like
+            <a href="http://www.google.com/chrome">Chrome</a>,
+            <a href="http://www.mozilla.com/firefox/">Firefox</a>,
+            <a href="http://www.apple.com/safari/">Safari</a> or Internet Explorer 10
+          </p>
+        </canvas>
+        <div className="allButtons">
+          <div className="topButton">
+            {topButton}
+          </div>
+          <div className="sideButtons">
+            {leftButton}
+            {rightButton}
+          </div>
+          <div className="bottomButton">
+            {bottomButton}
+          </div>
         </div>
       </div>
     );
