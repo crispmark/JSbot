@@ -35,9 +35,9 @@ function runMotor(lmotor, lspeed, rmotor, rspeed) {
   var pyshell = new PythonShell('./motorControl.py', {
     pythonPath: 'python2',
   });
-  var modspeed = Math.floor(rspeed*0.5);
+  var modspeed = Math.floor(lspeed*SPEED_MOD);
   // sends a message to the Python script via stdin
-  pyshell.send(JSON.stringify({left: {motor: lmotor, speed: lspeed}, right: {motor: rmotor, speed: modspeed}}));
+  pyshell.send(JSON.stringify({left: {motor: lmotor, speed: modspeed}, right: {motor: rmotor, speed: rspeed}}));
 
   // end the input stream and allow the process to exit
   pyshell.end(function (err) {
