@@ -20,7 +20,7 @@ const io = require('socket.io')(http);
 
 
 // import python dispatcher and runCommand(), along with command definitions
-const robo    = require('./robo');
+const robo    = require('./roboJohnny');
 const command = require('./robo-commands');
 
 io.on('connection', function(socket) {

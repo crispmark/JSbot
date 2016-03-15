@@ -13,8 +13,8 @@ const m2 = new five.Motor(configs.M2);
 const SPEED = 128;
 const TURN_SPEED = 64;
 
-function runCommand (val) {
-  switch(val) {
+function runCommand (msg) {
+  switch(msg.command) {
     case command.FORWARD:
       forward(SPEED);
       break;
