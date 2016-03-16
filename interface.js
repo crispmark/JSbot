@@ -101,10 +101,8 @@ var ButtonInterface = React.createClass({
           </div>
           <div className="sideButtons">
             {leftButton}
-            {rightButton}
-          </div>
-          <div className="bottomButton">
             {bottomButton}
+            {rightButton}
           </div>
         </div>
     );
@@ -114,32 +112,33 @@ var ButtonInterface = React.createClass({
 
 //create button to move robot forward
 function createTopButton(activeCommand) {
-  return createButton.call(this, activeCommand, command.FORWARD);
+  return createButton.call(this, activeCommand, 'topButton', command.FORWARD);
 }
 
 //create button to move robot back
 function createBottomButton(activeCommand) {
-  return createButton.call(this, activeCommand, command.REVERSE);
+  return createButton.call(this, activeCommand, 'bottomButton', command.REVERSE);
 }
 
 //create button to turn robot left
 function createLeftButton(activeCommand) {
-  return createButton.call(this, activeCommand, command.TURN_LEFT);
+  return createButton.call(this, activeCommand, 'leftButton', command.TURN_LEFT);
 }
 
 //create button to turn robot right
 function createRightButton(activeCommand) {
-  return createButton.call(this, activeCommand, command.TURN_RIGHT);
+  return createButton.call(this, activeCommand, 'rightButton', command.TURN_RIGHT);
 }
 
 //given two strings, the active command and a direction, create an input button
 //for controlling the robot
-function createButton(activeCommand, direction) {
+function createButton(activeCommand, id, direction) {
   if (activeCommand === direction) {
-    return(<button className="activeButton" onTouchEnd={this.handleRelease.bind(this, direction)} onTouchStart={this.handlePress.bind(this, direction)} onMouseDown={this.handlePress.bind(this, direction)}>{direction}</button>);
+    id = id + "-active";
+    return(<button className="activeButton" id={id} onTouchEnd={this.handleRelease.bind(this, direction)} onTouchStart={this.handlePress.bind(this, direction)} onMouseDown={this.handlePress.bind(this, direction)}></button>);
   }
   else {
-    return (<button onTouchEnd={this.handleRelease.bind(this, direction)} onTouchStart={this.handlePress.bind(this, direction)} onMouseDown={this.handlePress.bind(this, direction)}>{direction}</button>);
+    return (<button className="inactiveButton" id={id} onTouchEnd={this.handleRelease.bind(this, direction)} onTouchStart={this.handlePress.bind(this, direction)} onMouseDown={this.handlePress.bind(this, direction)}></button>);
   }
 }
 

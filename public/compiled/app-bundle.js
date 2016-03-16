@@ -19872,12 +19872,8 @@
 	        'div',
 	        { className: 'sideButtons' },
 	        leftButton,
+	        bottomButton,
 	        rightButton
-	      ),
-	      _react2.default.createElement(
-	        'div',
-	        { className: 'bottomButton' },
-	        bottomButton
 	      )
 	    );
 	  }
@@ -19885,39 +19881,32 @@
 	
 	//create button to move robot forward
 	function createTopButton(activeCommand) {
-	  return createButton.call(this, activeCommand, _roboCommands2.default.FORWARD);
+	  return createButton.call(this, activeCommand, 'topButton', _roboCommands2.default.FORWARD);
 	}
 	
 	//create button to move robot back
 	function createBottomButton(activeCommand) {
-	  return createButton.call(this, activeCommand, _roboCommands2.default.REVERSE);
+	  return createButton.call(this, activeCommand, 'bottomButton', _roboCommands2.default.REVERSE);
 	}
 	
 	//create button to turn robot left
 	function createLeftButton(activeCommand) {
-	  return createButton.call(this, activeCommand, _roboCommands2.default.TURN_LEFT);
+	  return createButton.call(this, activeCommand, 'leftButton', _roboCommands2.default.TURN_LEFT);
 	}
 	
 	//create button to turn robot right
 	function createRightButton(activeCommand) {
-	  return createButton.call(this, activeCommand, _roboCommands2.default.TURN_RIGHT);
+	  return createButton.call(this, activeCommand, 'rightButton', _roboCommands2.default.TURN_RIGHT);
 	}
 	
 	//given two strings, the active command and a direction, create an input button
 	//for controlling the robot
-	function createButton(activeCommand, direction) {
+	function createButton(activeCommand, id, direction) {
 	  if (activeCommand === direction) {
-	    return _react2.default.createElement(
-	      'button',
-	      { className: 'activeButton', onTouchEnd: this.handleRelease.bind(this, direction), onTouchStart: this.handlePress.bind(this, direction), onMouseDown: this.handlePress.bind(this, direction) },
-	      direction
-	    );
+	    id = id + "-active";
+	    return _react2.default.createElement('button', { className: 'activeButton', id: id, onTouchEnd: this.handleRelease.bind(this, direction), onTouchStart: this.handlePress.bind(this, direction), onMouseDown: this.handlePress.bind(this, direction) });
 	  } else {
-	    return _react2.default.createElement(
-	      'button',
-	      { onTouchEnd: this.handleRelease.bind(this, direction), onTouchStart: this.handlePress.bind(this, direction), onMouseDown: this.handlePress.bind(this, direction) },
-	      direction
-	    );
+	    return _react2.default.createElement('button', { className: 'inactiveButton', id: id, onTouchEnd: this.handleRelease.bind(this, direction), onTouchStart: this.handlePress.bind(this, direction), onMouseDown: this.handlePress.bind(this, direction) });
 	  }
 	}
 	

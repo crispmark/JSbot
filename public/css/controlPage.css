@@ -26,8 +26,36 @@ main {
   user-select: none;          /* Likely future */
 }
 
-.activeButton{
-  background-color: black;
+button, button:active {
+    border: 0px;
+    width: 125px;
+    height: 125px;
+}
+
+#topButton {
+  background: url(/img/arrow_up125.png) no-repeat;
+}
+#bottomButton {
+  background: url(/img/arrow_down125.png) no-repeat;
+}
+#leftButton {
+  background: url(/img/arrow_left125.png) no-repeat;
+}
+#rightButton {
+  background: url(/img/arrow_right125.png) no-repeat;
+}
+
+#topButton-active {
+  background: url(/img/arrow_up125-active.png) no-repeat;
+}
+#bottomButton-active {
+  background: url(/img/arrow_down125-active.png) no-repeat;
+}
+#leftButton-active {
+  background: url(/img/arrow_left125-active.png) no-repeat;
+}
+#rightButton-active {
+  background: url(/img/arrow_right125-active.png) no-repeat;
 }
 
 .title {
