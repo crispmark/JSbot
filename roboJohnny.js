@@ -89,7 +89,6 @@ function calcAngle(dx, dy) {
     return 270 + Math.atan2(absdy, absdx)*360/(2*Math.PI);
   }
 }
-
 function flashLightAngle(angle) {
   //forward
   if (angle >= 350 || angle <= 10) {
@@ -158,26 +157,38 @@ function stop() {
   stopLight()
 }
 
+var lightState = "forward";
+
 function backLight() {
-  backLed.blink(150);
-  leftLed.stop().on();
-  rightLed.stop().on();
+  if (lightState !== "back") {
+    lightState = "back";
+    backLed.blink(150);
+    leftLed.stop().on();
+    rightLed.stop().on();
+  }
 }
 
 function leftLight() {
-  backLed.stop().on();
-  leftLed.blink(150);
-  rightLed.stop().on();
+  if (lightState !== "left") {
+    lightState = "left";
+    backLed.stop().on();
+    leftLed.blink(150);
+    rightLed.stop().on();
+  }
 }
 
 function rightLight() {
-  backLed.stop().on();
-  leftLed.stop().on();
-  rightLed.blink(150)
+  if (lightState !== "right") {
+    lightState = "right";
+    backLed.stop().on();
+    leftLed.stop().on();
+    rightLed.blink(150)
+  }
 }
 
 //stop light
 function stopLight() {
+  lightState = "forward"
   backLed.stop().on();
   leftLed.stop().on();
   rightLed.stop().on();
