@@ -24,7 +24,7 @@ const io = require('socket.io')(http);
 
 
 // instantiate board and import runCommand()
-const robo    = require('./robo');
+const robo    = require('./roboJohnny');
 const command = require('./robo-commands'); // command definitions
 
 io.on('connection', function(socket) {
@@ -33,7 +33,7 @@ io.on('connection', function(socket) {
   //listen for commands to robot
   socket.on(command.COMMAND, function(msg) {
     console.log('running command:', msg);
-    //robo.runCommand(msg); // msg contains the specific command to run
+    robo.runCommand(msg); // msg contains the specific command to run
   });
 
   socket.on('disconnect', function(){

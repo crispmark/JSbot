@@ -60,6 +60,18 @@ function runCommand (msg) {
   }
 }
 
+function custom(dx, dy) {
+  var m1speed = dy - dx;
+  var m2speed = dy + dx;
+
+  if (m1speed < 0)
+  m1.rev(Math.abs(m1speed));
+  else m1.fwd(m1speed);
+
+  if (m2speed < 0)
+  m2.rev(Math.abs(m2speed));
+  else m2.fwd(m2speed);
+}
 // SPEED_MOD compensates for tendency to drift to one side over time
 function forward (speed) {
   m1.fwd(speed);
