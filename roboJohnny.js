@@ -64,31 +64,31 @@ function runCommand (msg) {
 function forward (speed) {
   m1.fwd(speed);
   m2.fwd(speed * SPEED_MOD);
-  backLed.stop();
+  backLed.stop().on();
 }
 
 function reverse (speed) {
   m1.rev(speed);
   m2.rev(speed * SPEED_MOD);
-  backLed.blink('250');
+  backLed.blink('150');
 }
 
 function left (speed) {
   m1.rev(speed);
   m2.fwd(speed * SPEED_MOD);
-  backLed.stop();
+  backLed.stop().on();
 }
 
 function right (speed) {
   m1.fwd(speed);
   m2.rev(speed * SPEED_MOD);
-  backLed.stop();
+  backLed.stop().on();
 }
 
 function stop() {
   m1.stop();
   m2.stop();
-  backLed.stop();
+  backLed.stop().on();
 }
 
 module.exports = { runCommand: runCommand };
