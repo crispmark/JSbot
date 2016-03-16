@@ -7,6 +7,10 @@ app.get('/', function(req, res){
   res.sendFile(__dirname + '/index.html');
 });
 
+app.get('/joystick', function(req, res){
+  res.sendFile(__dirname + '/joystick.html');
+});
+
 // initialize http server using express app, start listening on port
 const http = require('http').Server(app);
 const port = 3000;
@@ -20,7 +24,7 @@ const io = require('socket.io')(http);
 
 
 // instantiate board and import runCommand()
-const robo    = require('./roboJohnny');
+const robo    = require('./robo');
 const command = require('./robo-commands'); // command definitions
 
 io.on('connection', function(socket) {
@@ -29,7 +33,7 @@ io.on('connection', function(socket) {
   //listen for commands to robot
   socket.on(command.COMMAND, function(msg) {
     console.log('running command:', msg);
-    robo.runCommand(msg); // msg contains the specific command to run
+    //robo.runCommand(msg); // msg contains the specific command to run
   });
 
   socket.on('disconnect', function(){

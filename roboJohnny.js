@@ -38,21 +38,24 @@ function runCommand (msg) {
     var command = msg.command;
 
     switch(command) {
+      case commands.CUSTOM:
+      customSpeed(msg.dx, msg.dy);
+      break;
       case commands.FORWARD:
-        forward(SPEED);
-        break;
+      forward(SPEED);
+      break;
       case commands.REVERSE:
-        reverse(SPEED);
-        break;
+      reverse(SPEED);
+      break;
       case commands.TURN_LEFT:
-        left(TURN_SPEED);
-        break;
+      left(TURN_SPEED);
+      break;
       case commands.TURN_RIGHT:
-        right(TURN_SPEED);
-        break;
+      right(TURN_SPEED);
+      break;
       case commands.STOP:
-        stop();
-        break;
+      stop();
+      break;
     }
   }
 }
