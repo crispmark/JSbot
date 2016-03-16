@@ -11,10 +11,13 @@ const configs = five.Motor.SHIELD_CONFIGS.ADAFRUIT_V2;
 // instantiate motors when board is ready
 var m1;
 var m2;
+var backLed;
 
 board.on('ready', function() {
   m1 = new five.Motor(configs.M1);
   m2 = new five.Motor(configs.M2);
+  backLed = new five.Led('GPIO21');
+  backLed.on();
 });
 
 const SPEED = 128;
@@ -61,26 +64,31 @@ function runCommand (msg) {
 function forward (speed) {
   m1.fwd(speed);
   m2.fwd(speed * SPEED_MOD);
+  backLed.stop();
 }
 
 function reverse (speed) {
   m1.rev(speed);
   m2.rev(speed * SPEED_MOD);
+  backLed.blink('250');
 }
 
 function left (speed) {
   m1.rev(speed);
   m2.fwd(speed * SPEED_MOD);
+  backLed.stop();
 }
 
 function right (speed) {
   m1.fwd(speed);
   m2.rev(speed * SPEED_MOD);
+  backLed.stop();
 }
 
 function stop() {
   m1.stop();
   m2.stop();
+  backLed.stop();
 }
 
 module.exports = { runCommand: runCommand };
