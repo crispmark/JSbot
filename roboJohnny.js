@@ -65,12 +65,12 @@ function customSpeed(dx, dy) {
   var m2speed = dy + dx;
 
   if (m1speed < 0)
-  m1.rev(Math.abs(m1speed));
-  else m1.fwd(m1speed);
+  m1.fwd(Math.abs(m1speed));
+  else m1.rev(m1speed);
 
   if (m2speed < 0)
-  m2.rev(Math.abs(m2speed));
-  else m2.fwd(m2speed);
+  m2.fwd(Math.abs(m2speed));
+  else m2.rev(m2speed);
 }
 // SPEED_MOD compensates for tendency to drift to one side over time
 function forward (speed) {
