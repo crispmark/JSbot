@@ -3,7 +3,7 @@ var Board = require("./board");
 var Emitter = require("events").EventEmitter;
 var util = require("util");
 var nanosleep = require("./sleep").nano;
-var __ = require("./fn");
+var Fn = require("./fn");
 var priv = new Map();
 var active = new Map();
 
@@ -24,9 +24,11 @@ util.inherits(Base, Emitter);
 var Controllers = {
   // http://www.adafruit.com/datasheets/mcp23017.pdf
   MCP23017: {
+    ADDRESSES: {
+      value: [0x20]
+    },
     REGISTER: {
       value: {
-        ADDRESS: 0x20,
         // IO A
         IODIRA: 0x00,
         GPPUA: 0x0C,
@@ -43,17 +45,17 @@ var Controllers = {
       value: function(opts) {
         var state = priv.get(this);
 
-        state.iodir = [ 0xff, 0xff ];
-        state.olat = [ 0xff, 0xff ];
-        state.gpio = [ 0xff, 0xff ];
-        state.gppu = [ 0x00, 0x00 ];
+        state.iodir = [0xff, 0xff];
+        state.olat = [0xff, 0xff];
+        state.gpio = [0xff, 0xff];
+        state.gppu = [0x00, 0x00];
 
-        this.address = opts.address || this.REGISTER.ADDRESS;
+        this.address = opts.address || this.ADDRESSES[0];
         opts.address = this.address;
 
         this.io.i2cConfig(opts);
-        this.io.i2cWrite(this.address, [ this.REGISTER.IODIRA, state.iodir[this.REGISTER.IODIRA] ]);
-        this.io.i2cWrite(this.address, [ this.REGISTER.IODIRB, state.iodir[this.REGISTER.IODIRB] ]);
+        this.io.i2cWrite(this.address, [this.REGISTER.IODIRA, state.iodir[this.REGISTER.IODIRA]]);
+        this.io.i2cWrite(this.address, [this.REGISTER.IODIRB, state.iodir[this.REGISTER.IODIRB]]);
 
         Object.assign(this.MODES, this.io.MODES);
 
@@ -109,7 +111,7 @@ var Controllers = {
         }
 
         this.pins[pinIndex].mode = mode;
-        this.io.i2cWrite(this.address, [ port, iodir ]);
+        this.io.i2cWrite(this.address, [port, iodir]);
 
         state.iodir[port] = iodir;
       }
@@ -145,7 +147,7 @@ var Controllers = {
 
         this.pins[pinIndex].report = 0;
         this.pins[pinIndex].value = value;
-        this.io.i2cWrite(this.address, [ gpioaddr, gpio ]);
+        this.io.i2cWrite(this.address, [gpioaddr, gpio]);
 
         state.olat[port] = gpio;
         state.gpio[port] = gpio;
@@ -177,7 +179,7 @@ var Controllers = {
           gppu &= ~(1 << pin);
         }
 
-        this.io.i2cWrite(this.address, [ gppuaddr, gppu ]);
+        this.io.i2cWrite(this.address, [gppuaddr, gppu]);
 
         state.gppu[port] = gppu;
       }
@@ -210,9 +212,11 @@ var Controllers = {
     },
   },
   MCP23008: {
+    ADDRESSES: {
+      value: [0x20]
+    },
     REGISTER: {
       value: {
-        ADDRESS: 0x20,
         IODIR: 0x00,
         GPPU: 0x06,
         GPIO: 0x09,
@@ -223,17 +227,17 @@ var Controllers = {
       value: function(opts) {
         var state = priv.get(this);
 
-        state.iodir = [ 0xff ];
-        state.olat = [ 0xff ];
-        state.gpio = [ 0xff ];
-        state.gppu = [ 0x00 ];
+        state.iodir = [0xff];
+        state.olat = [0xff];
+        state.gpio = [0xff];
+        state.gppu = [0x00];
 
-        this.address = opts.address || this.REGISTER.ADDRESS;
+        this.address = opts.address || this.ADDRESSES[0];
 
         opts.address = this.address;
 
         this.io.i2cConfig(opts);
-        this.io.i2cWrite(this.address, [ this.REGISTER.IODIR, state.iodir[this.REGISTER.IODIR] ]);
+        this.io.i2cWrite(this.address, [this.REGISTER.IODIR, state.iodir[this.REGISTER.IODIR]]);
 
         Object.assign(this.MODES, this.io.MODES);
 
@@ -280,7 +284,7 @@ var Controllers = {
         }
 
         this.pins[pinIndex].mode = mode;
-        this.io.i2cWrite(this.address, [ port, iodir ]);
+        this.io.i2cWrite(this.address, [port, iodir]);
 
         state.iodir[port] = iodir;
       }
@@ -302,7 +306,7 @@ var Controllers = {
 
         this.pins[pinIndex].report = 0;
         this.pins[pinIndex].value = value;
-        this.io.i2cWrite(this.address, [ gpioaddr, gpio ]);
+        this.io.i2cWrite(this.address, [gpioaddr, gpio]);
 
         state.olat[port] = gpio;
         state.gpio[port] = gpio;
@@ -323,7 +327,7 @@ var Controllers = {
           gppu &= ~(1 << pin);
         }
 
-        this.io.i2cWrite(this.address, [ gppuaddr, gppu ]);
+        this.io.i2cWrite(this.address, [gppuaddr, gppu]);
 
         state.gppu[port] = gppu;
       }
@@ -349,11 +353,10 @@ var Controllers = {
     },
   },
   PCF8574: {
-    REGISTER: {
-      value: {
-        ADDRESS: 0x20,
-      }
+    ADDRESSES: {
+      value: [0x20]
     },
+    REGISTER: {},
     initialize: {
       value: function(opts) {
         var state = priv.get(this);
@@ -362,7 +365,7 @@ var Controllers = {
         state.ddr = 0x00;
         state.pins = 0x00;
 
-        this.address = opts.address || this.REGISTER.ADDRESS;
+        this.address = opts.address || this.ADDRESSES[0];
 
         opts.address = this.address;
         this.io.i2cConfig(opts);
@@ -466,11 +469,10 @@ var Controllers = {
     },
   },
   PCF8575: {
-    REGISTER: {
-      value: {
-        ADDRESS: 0x20,
-      }
+    ADDRESSES: {
+      value: [0x20]
     },
+    REGISTER: {},
     initialize: {
       value: function(opts) {
         var state = priv.get(this);
@@ -478,7 +480,7 @@ var Controllers = {
         state.port = [0x00, 0x01];
         state.gpio = [0x00, 0x00];
 
-        this.address = opts.address || this.REGISTER.ADDRESS;
+        this.address = opts.address || this.ADDRESSES[0];
 
         opts.address = this.address;
         this.io.i2cConfig(opts);
@@ -575,9 +577,11 @@ var Controllers = {
     },
   },
   PCA9685: {
+    ADDRESSES: {
+      value: [0x40]
+    },
     REGISTER: {
       value: {
-        ADDRESS: 0x40,
         MODE1: 0x00,
         PRESCALE: 0xFE,
         BASE: 0x06
@@ -591,7 +595,7 @@ var Controllers = {
         //
         state.frequency = Board.constrain(opts.frequency || 1526, 24, 1526) * 0.9;
 
-        this.address = opts.address || this.REGISTER.ADDRESS;
+        this.address = opts.address || this.ADDRESSES[0];
         this.pwmRange = opts.pwmRange || [0, 4095];
 
         Object.defineProperties(this, {
@@ -681,7 +685,7 @@ var Controllers = {
 
         value = Board.constrain(value, 0, 180);
 
-        var off = __.map(value, 0, 180, this.pwmRange[0] / 4, this.pwmRange[1] / 4);
+        var off = Fn.map(value, 0, 180, this.pwmRange[0] / 4, this.pwmRange[1] / 4);
 
         this.io.i2cWrite(this.address, [
           this.REGISTER.BASE + 4 * pin,
@@ -726,11 +730,10 @@ var Controllers = {
   },
   // http://www.nxp.com/documents/data_sheet/PCF8591.pdf
   PCF8591: {
-    REGISTER: {
-      value: {
-        ADDRESS: 0x48,
-      }
+    ADDRESSES: {
+      value: [0x48]
     },
+    REGISTER: {},
     initialize: {
       value: function(opts) {
         var state = priv.get(this);
@@ -738,7 +741,7 @@ var Controllers = {
         state.control = 0x45;
         state.reading = false;
 
-        this.address = opts.address || this.REGISTER.ADDRESS;
+        this.address = opts.address || this.ADDRESSES[0];
 
         opts.address = this.address;
         this.io.i2cConfig(opts);
@@ -816,19 +819,19 @@ var Controllers = {
         var state = priv.get(this);
 
         // _S[\d]   (Digital: 2, 4, 6, 7)
-        state.select = [ 2, 4, 6, 7];
+        state.select = [2, 4, 6, 7];
         // _IOS[\d] (Digital: 10, 11, 12)
-        state.ios = [ null, 10, 11, 12 ];
+        state.ios = [null, 10, 11, 12];
         // _IO[\d]  (Analog In: "A0", "A1", "A2")
-        state.io = [ null, 14, 15, 16 ];
-        state.aio = [ null, 0, 1, 2 ];
+        state.io = [null, 14, 15, 16];
+        state.aio = [null, 0, 1, 2];
 
         state.outMode = 8;
         state.pinMap = {};
         state.rowReading = [false, false, false];
         state.rowMode = [null, null, null];
         // Each rowValue is a single uint16
-        state.rowValues = [ 0, 0, 0 ];
+        state.rowValues = [0, 0, 0];
 
         Object.assign(this.MODES, {
           INPUT: 0,
@@ -1080,11 +1083,10 @@ var Controllers = {
   },
 
   GROVEPI: {
-    REGISTER: {
-      value: {
-        ADDRESS: 0x04,
-      }
+    ADDRESSES: {
+      value: [0x04]
     },
+    REGISTER: {},
     COMMANDS: {
       value: {
         DIGITAL_READ: 0x01,
@@ -1119,7 +1121,7 @@ var Controllers = {
           return number === 3 || number === 5 || number === 6;
         };
 
-        this.address = opts.address || this.REGISTER.ADDRESS;
+        this.address = opts.address || this.ADDRESSES[0];
         opts.address = this.address;
 
         this.io.i2cConfig(opts);
@@ -1208,7 +1210,7 @@ var Controllers = {
         var pinIndex = state.pinMap[pin];
 
         if (mode === this.io.MODES.INPUT ||
-            mode === this.io.MODES.ANALOG) {
+          mode === this.io.MODES.ANALOG) {
           this.pins[pinIndex].mode = 0;
         } else {
           this.pins[pinIndex].mode = 1;
@@ -1300,7 +1302,7 @@ var Controllers = {
           var pin = this.pins[pinIndex];
           var isAnalog = pin.type === "analog";
 
-          this.io.i2cWrite(this.address, [ pin.command, pinIndex, 0, 0 ]);
+          this.io.i2cWrite(this.address, [pin.command, pinIndex, 0, 0]);
           this.io.i2cReadOnce(this.address, pin.length, function(data) {
             var value;
 
@@ -1474,14 +1476,108 @@ var Controllers = {
       }
     },
   },
+  CD74HC4067: {
+    /*
+    | Address 1 (D9) |  Address 0 (D8) | Address |
+    | -------------- |  -------------- | ------- |
+    | 0              |  0              | 0x0A    |
+    | 0              |  1              | 0x0B    |
+    | 1              |  0              | 0x0C    |
+    | 1              |  1              | 0x0D    |
+    */
+    ADDRESSES: {
+      value: [0x0A, 0x0B, 0x0C, 0x0D]
+    },
+    REGISTER: {},
+    initialize: {
+      value: function(opts) {
+        var state = priv.get(this);
+
+        state.reading = false;
+
+        this.address = opts.address || this.ADDRESSES[0];
+
+        opts.address = this.address;
+        this.io.i2cConfig(opts);
+
+        Object.assign(this.MODES, this.io.MODES);
+
+        for (var i = 0; i < 16; i++) {
+          this.pins.push({
+            supportedModes: [
+              this.MODES.ANALOG
+            ],
+            mode: 1,
+            value: 0,
+            report: 0,
+            analogChannel: i
+          });
+          this.analogPins.push(i);
+        }
+
+        this.name = "CD74HC4067";
+        this.isReady = true;
+
+        this.emit("connect");
+        this.emit("ready");
+      }
+    },
+    normalize: {
+      value: function(pin) {
+        if (typeof pin === "string" && pin[0] === "A") {
+          return +pin.slice(1);
+        }
+        return pin;
+      }
+    },
+    pinMode: {
+      value: function(pin, mode) {
+        this.pins[pin].mode = mode;
+      }
+    },
+    analogRead: {
+      value: function(pin, callback) {
+        var state = priv.get(this);
+        var pinIndex = pin;
+
+        this.pins[pinIndex].report = 1;
+
+        this.on("analog-read-" + pin, callback);
+
+        this.io.i2cWrite(this.address, pinIndex, 1);
+
+        // Since this operation will read all 4 pins,
+        // it only needs to be initiated once.
+        if (!state.reading) {
+          state.reading = true;
+
+          this.io.i2cRead(this.address, 32, function(data) {
+            var value;
+            for (var i = 0; i < 16; i++) {
+              var index = i * 2;
+
+              value = (data[index] << 8) + data[index + 1];
+
+              this.pins[i].value = value;
+
+              if (this.pins[i].report) {
+                this.emit("analog-read-" + i, value);
+              }
+            }
+          }.bind(this));
+        }
+      }
+    },
+  },
 };
 
+Controllers["CD74HCT4067"] = Controllers.CD74HC4067;
+Controllers["74HC4067"] = Controllers.CD74HC4067;
+
 Controllers.PCF8574A = Object.assign({}, Controllers.PCF8574, {
-  REGISTER: {
-    value: {
-      ADDRESS: 0x38,
-    }
-  },
+  ADDRESSES: {
+    value: [0x38]
+  }
 });
 
 var methods = Object.keys(Board.prototype);
@@ -1518,7 +1614,10 @@ function Expander(opts) {
   }
 
   Board.Component.call(
-    this, opts = Board.Options(opts), { normalizePin: false, requestPin: false }
+    this, opts = Board.Options(opts), {
+      normalizePin: false,
+      requestPin: false
+    }
   );
 
   expander = active.get(this.address);

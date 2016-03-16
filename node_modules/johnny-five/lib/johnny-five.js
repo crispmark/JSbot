@@ -20,6 +20,7 @@ module.exports = {
   ESC: require("./esc"),
   Expander: require("./expander"),
   Fn: require("./fn"),
+  GPS: require("./gps"),
   Gripper: require("./gripper"),
   Gyro: require("./gyro"),
   Hygrometer: require("./hygrometer"),
@@ -67,7 +68,11 @@ module.exports.Board.Virtual = function(opts) {
   }
 
   return new module.exports.Board(
-    Object.assign({}, { repl: false, debug: false, sigint: false }, temp)
+    Object.assign({}, {
+      repl: false,
+      debug: false,
+      sigint: false
+    }, temp)
   );
 };
 

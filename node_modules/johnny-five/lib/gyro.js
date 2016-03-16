@@ -63,7 +63,7 @@ var Controllers = {
       value: function(opts, dataHandler) {
         var IMU = require("./imu");
         var state = priv.get(this),
-          driver = IMU.Drivers.get(this.board, "MPU-6050", opts);
+          driver = IMU.Drivers.get(this.board, "MPU6050", opts);
 
         state.sensitivity = opts.sensitivity || 131;
 
@@ -169,17 +169,21 @@ function Gyro(opts) {
   }
 
   if (controller == null) {
-    controller = Controllers["ANALOG"];
+    controller = Controllers.ANALOG;
   }
 
   Board.Controller.call(this, controller, opts);
 
   if (!this.toNormal) {
-    this.toNormal = opts.toNormal || function(raw) { return raw; };
+    this.toNormal = opts.toNormal || function(raw) {
+      return raw;
+    };
   }
 
   if (!this.toDegreesPerSecond) {
-    this.toDegreesPerSecond = opts.toDegreesPerSecond || function(raw) { return raw; };
+    this.toDegreesPerSecond = opts.toDegreesPerSecond || function(raw) {
+      return raw;
+    };
   }
 
   priv.set(this, state);
