@@ -31,14 +31,22 @@ socketServer.on('connection', function(socket) {
 });
 
 socketServer.broadcast = function(data, opts) {
-	for (var i in this.clients) {
-		if (this.clients[i].readyState == 1) {
-			this.clients[i].send(data, opts);
+	// for (var i in this.clients) {
+	// 	if (this.clients[i].readyState == 1) {
+	// 		this.clients[i].send(data, opts);
+	// 	}
+	// 	else {
+	// 		console.log('i:', i, '\nclients:', this.clients);
+	// 	}
+	// }
+	this.clients.forEach( function(client, i) {
+		if (client.readyState == 1) {
+			client.send(data, opts);
 		}
 		else {
-			console.log('i:', i, '\nclients:', this.clients);
+			console.log('cameraServer Error: client', i, 'not connected...');
 		}
-	}
+	});
 };
 
 
