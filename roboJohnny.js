@@ -72,7 +72,46 @@ function runCommand (msg) {
   }
 }
 
+//calculate angle of joystick
+function calcAngle(dx, dy) {
+  var absdx = Math.abs(dx);
+  var absdy = Math.abs(dy);
+  if (dx >= 0 && dy <= 0) {
+    return 90 - Math.atan2(absdy, absdx)*360/(2*Math.PI);
+  }
+  else if (dx >= 0 && dy >= 0) {
+    return 90 + Math.atan2(absdy, absdx)*360/(2*Math.PI);
+  }
+  else if (dx <= 0 && dy >= 0) {
+    return 270 - Math.atan2(absdy, absdx)*360/(2*Math.PI);
+  }
+  else if (dx <= 0 && dy <= 0) {
+    return 270 + Math.atan2(absdy, absdx)*360/(2*Math.PI);
+  }
+}
+
+function flashLightAngle(angle) {
+  //forward
+  if (angle >= 350 || angle <= 10) {
+    stopLight();
+  }
+  //backward
+  else if (angle >= 260 && angle <= 280) {
+    backLight();
+  }
+  //left
+  else if (angle > 260 && angle < 350) {
+    leftLight();
+  }
+  //right
+  else if (angle < 260 && angle > 10) {
+    rightLight();
+  }
+}
+
 function customSpeed(dx, dy) {
+  var angle = calcAngle(dx, dy);
+  flashLightAngle(angle);
   var turnReduction = 0.75;
   var m1speed = dy + Math.floor(dx*turnReduction);
   var m2speed = dy - Math.floor(dx*turnReduction);
@@ -92,42 +131,53 @@ function forward (speed) {
   m2.fwd(speed * SPEED_MOD);
 
   // if lights are blinking, stop them and set them to 'on'
-  backLed.stop().on();
-  leftLed.stop().on();
-  rightLed.stop().on();
+  stopLight();
 }
 
 function reverse (speed) {
   m1.rev(speed);
   m2.rev(speed * SPEED_MOD);
-
-  backLed.blink(150);
-  leftLed.stop().on();
-  rightLed.stop().on();
+  backLight();
 }
 
 function left (speed) {
   m1.fwd(speed);
   m2.rev(speed * SPEED_MOD);
-
-  backLed.stop().on();
-  leftLed.blink(150);
-  rightLed.stop().on();
+  leftLight();
 }
 
 function right (speed) {
   m1.rev(speed);
   m2.fwd(speed * SPEED_MOD);
-
-  backLed.stop().on();
-  leftLed.stop().on();
-  rightLed.blink(150)
+  rightLight();
 }
 
 function stop() {
   m1.stop();
   m2.stop();
+  stopLight()
+}
 
+function backLight() {
+  backLed.blink(150);
+  leftLed.stop().on();
+  rightLed.stop().on();
+}
+
+function leftLight() {
+  backLed.stop().on();
+  leftLed.blink(150);
+  rightLed.stop().on();
+}
+
+function rightLight() {
+  backLed.stop().on();
+  leftLed.stop().on();
+  rightLed.blink(150)
+}
+
+//stop light
+function stopLight() {
   backLed.stop().on();
   leftLed.stop().on();
   rightLed.stop().on();
