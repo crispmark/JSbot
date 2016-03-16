@@ -94,7 +94,6 @@ var ButtonInterface = React.createClass({
     var bottomButton = createBottomButton.call(this, activeCommand);
     var leftButton = createLeftButton.call(this, activeCommand);
     var rightButton = createRightButton.call(this, activeCommand);
-    var header = createHeader();
     return (
         <div className="allButtons">
           <div className="topButton">
@@ -112,33 +111,6 @@ var ButtonInterface = React.createClass({
   }
 });
 
-//creates the main page
-function createPage() {
-  var header = createHeader();
-  return (
-    <div>
-      {header}
-      <main>
-        <canvas id="videoCanvas" width="640" height="480">
-          <p>
-            Please use a browser that supports the Canvas Element, like
-            <a href="http://www.google.com/chrome">Chrome</a>,
-            <a href="http://www.mozilla.com/firefox/">Firefox</a>,
-            <a href="http://www.apple.com/safari/">Safari</a> or Internet Explorer 10
-          </p>
-        </canvas>
-        <ButtonInterface />
-      </main>
-    </div>
-  )
-}
-
-//create the header for the webpage
-function createHeader() {
-  return (
-    <div></div>
-  )
-}
 
 //create button to move robot forward
 function createTopButton(activeCommand) {
@@ -193,5 +165,4 @@ function getDirectionFromKey(key) {
   }
 }
 
-// adds buttons to DOM
-ReactDOM.render(createPage(), document.getElementById('container'));
+module.exports = ButtonInterface;

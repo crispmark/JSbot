@@ -4,7 +4,7 @@
   "description": "interface for interacting with robot tank",
   "main": "interface.js",
   "scripts": {
-    "start": "nodemon server.js -i public/ & webpack --watch --progress",
+    "start": "nodemon server.js & webpack",
     "test": "node robo.js"
   },
   "repository": {
