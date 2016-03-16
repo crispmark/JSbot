@@ -36,7 +36,7 @@ socketServer.broadcast = function(data, opts) {
 			this.clients[i].send(data, opts);
 		}
 		else {
-			// console.log('Error: Client (' + i + ') not connected.');
+			console.log('Error: Client (' + i + ') not connected.');
 		}
 	}
 };
