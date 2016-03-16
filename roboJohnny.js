@@ -60,7 +60,7 @@ function runCommand (msg) {
   }
 }
 
-function custom(dx, dy) {
+function customSpeed(dx, dy) {
   var m1speed = dy - dx;
   var m2speed = dy + dx;
 
