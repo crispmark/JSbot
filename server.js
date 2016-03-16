@@ -20,7 +20,7 @@ http.listen(port, function(){
 
 // initialize socket and start listening for messages
 const io = require('socket.io')(http);
-
+var socketQueue = [];
 
 
 // instantiate board and import runCommand()
@@ -28,15 +28,19 @@ const robo    = require('./roboJohnny');
 const command = require('./robo-commands'); // command definitions
 
 io.on('connection', function(socket) {
+  socketQueue.push(socket);
   console.log('a user connected (id:', socket.id, ')');
 
   //listen for commands to robot
   socket.on(command.COMMAND, function(msg) {
-    console.log('running command:', msg);
-    robo.runCommand(msg); // msg contains the specific command to run
+    if (socket === socketQueue[0]) {
+      console.log('running command:', msg);
+      robo.runCommand(msg); // msg contains the specific command to run
+    }
   });
 
   socket.on('disconnect', function(){
+    socketQueue.shift();
     console.log('a user disconnected (id:', socket.id, ')');
 
     robo.runCommand({
