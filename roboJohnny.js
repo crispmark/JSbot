@@ -20,9 +20,9 @@ board.on('ready', function() {
   backLed.on();
 });
 
-const SPEED = 128;
-const TURN_SPEED = 100;
-const SPEED_MOD = 0.97;
+const SPEED = 160;
+const TURN_SPEED = 160;
+const SPEED_MOD = 1.03;
 //the time at which the last command was received
 var lastCommand = -Infinity;
 
