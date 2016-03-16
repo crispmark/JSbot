@@ -92,19 +92,19 @@ function calcAngle(dx, dy) {
 
 function flashLightAngle(angle) {
   //forward
-  if (angle >= 350 || angle <= 10) {
+  if (angle >= 340 || angle <= 20) {
     stopLight();
   }
   //backward
-  else if (angle >= 170 && angle <= 190) {
+  else if (angle >= 160 && angle <= 200) {
     backLight();
   }
   //left
-  else if (angle > 190 && angle < 350) {
+  else if (angle > 200 && angle < 340) {
     leftLight();
   }
   //right
-  else if (angle < 170 && angle > 10) {
+  else if (angle < 160 && angle > 20) {
     rightLight();
   }
 }
