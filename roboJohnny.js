@@ -96,15 +96,15 @@ function flashLightAngle(angle) {
     stopLight();
   }
   //backward
-  else if (angle >= 260 && angle <= 280) {
+  else if (angle >= 170 && angle <= 190) {
     backLight();
   }
   //left
-  else if (angle > 260 && angle < 350) {
+  else if (angle > 190 && angle < 350) {
     leftLight();
   }
   //right
-  else if (angle < 260 && angle > 10) {
+  else if (angle < 170 && angle > 10) {
     rightLight();
   }
 }
