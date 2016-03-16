@@ -59,8 +59,27 @@ var Controllers = {
         return raw / 1000;
       }
     }
-  }
+  },
+  MS5611: {
+    initialize: {
+      value: function(opts, dataHandler) {
+        var Multi = require("./imu");
+        var driver = Multi.Drivers.get(this.board, "MS5611", opts);
+        driver.on("data", function(data) {
+          dataHandler.call(this, data.pressure);
+        }.bind(this));
+      }
+    },
+    // kPa (Kilopascals)
+    toPressure: {
+      value: function(raw) {
+        return raw / 1000;
+      }
+    }
+  },
 };
+
+Controllers["BMP085"] = Controllers["BMP-085"] = Controllers.BMP180;
 
 /**
  * Barometer
@@ -107,7 +126,9 @@ function Barometer(opts) {
   Board.Controller.call(this, controller, opts);
 
   if (!this.toPressure) {
-    this.toPressure = opts.toPressure || function(raw) { return raw; };
+    this.toPressure = opts.toPressure || function(raw) {
+      return raw;
+    };
   }
 
   if (typeof this.initialize === "function") {

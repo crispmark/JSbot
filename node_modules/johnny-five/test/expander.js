@@ -317,13 +317,19 @@ exports["Expander.get(opts)"] = {
 
   getsAnExistingExpander: function(test) {
     test.expect(1);
-    test.equal(Expander.get({ address: 0x20, controller: "PCF8574" }), this.expander);
+    test.equal(Expander.get({
+      address: 0x20,
+      controller: "PCF8574"
+    }), this.expander);
     test.done();
   },
 
   getsANewExpander: function(test) {
     test.expect(1);
-    test.notEqual(Expander.get({ address: 0x21, controller: "PCF8574" }), this.expander);
+    test.notEqual(Expander.get({
+      address: 0x21,
+      controller: "PCF8574"
+    }), this.expander);
     test.done();
   },
 
@@ -331,7 +337,10 @@ exports["Expander.get(opts)"] = {
     test.expect(1);
 
     test.throws(function() {
-      Expander.get({ address: 0x20, controller: "PCA9685" });
+      Expander.get({
+        address: 0x20,
+        controller: "PCA9685"
+      });
     });
 
     test.done();
@@ -341,7 +350,10 @@ exports["Expander.get(opts)"] = {
     test.expect(1);
 
     test.throws(function() {
-      Expander.get({ address: "0x20", controller: "PCA9685" });
+      Expander.get({
+        address: "0x20",
+        controller: "PCA9685"
+      });
     });
 
     test.done();
@@ -351,7 +363,10 @@ exports["Expander.get(opts)"] = {
     test.expect(1);
 
     test.throws(function() {
-      Expander.get({ address: "invalid", controller: "PCA9685" });
+      Expander.get({
+        address: "invalid",
+        controller: "PCA9685"
+      });
     });
 
     test.done();
@@ -361,7 +376,10 @@ exports["Expander.get(opts)"] = {
     test.expect(1);
 
     test.throws(function() {
-      Expander.get({ address: 0x20, controller: {} });
+      Expander.get({
+        address: 0x20,
+        controller: {}
+      });
     });
 
     test.done();
@@ -497,8 +515,8 @@ exports["Expander - MCP23017"] = {
 
     // console.log(this.i2cWrite.getCall(0).args);
     // 2 For initialization
-    test.deepEqual(this.i2cWrite.getCall(0).args, [ 32, [ 0, 255 ] ]);
-    test.deepEqual(this.i2cWrite.getCall(1).args, [ 32, [ 1, 255 ] ]);
+    test.deepEqual(this.i2cWrite.getCall(0).args, [32, [0, 255]]);
+    test.deepEqual(this.i2cWrite.getCall(1).args, [32, [1, 255]]);
 
     var byte = 0x100;
     var dir = 0;
@@ -512,8 +530,8 @@ exports["Expander - MCP23017"] = {
         multiple = 2;
       }
 
-      test.deepEqual(this.i2cWrite.getCall(i).args, [ 32, [ dir, byte - multiple ] ]);
-      test.deepEqual(this.i2cWrite.getCall(i + 1).args, [ 32, [ gpio, byte - multiple ] ]);
+      test.deepEqual(this.i2cWrite.getCall(i).args, [32, [dir, byte - multiple]]);
+      test.deepEqual(this.i2cWrite.getCall(i + 1).args, [32, [gpio, byte - multiple]]);
 
       multiple <<= 1;
     }
@@ -541,22 +559,22 @@ exports["Expander - MCP23017"] = {
     }
 
     var expects = [
-      [ 32, [ 0, 1 ] ],
-      [ 32, [ 0, 3 ] ],
-      [ 32, [ 0, 7 ] ],
-      [ 32, [ 0, 15 ] ],
-      [ 32, [ 0, 31 ] ],
-      [ 32, [ 0, 63 ] ],
-      [ 32, [ 0, 127 ] ],
-      [ 32, [ 0, 255 ] ],
-      [ 32, [ 1, 1 ] ],
-      [ 32, [ 1, 3 ] ],
-      [ 32, [ 1, 7 ] ],
-      [ 32, [ 1, 15 ] ],
-      [ 32, [ 1, 31 ] ],
-      [ 32, [ 1, 63 ] ],
-      [ 32, [ 1, 127 ] ],
-      [ 32, [ 1, 255 ] ]
+      [32, [0, 1]],
+      [32, [0, 3]],
+      [32, [0, 7]],
+      [32, [0, 15]],
+      [32, [0, 31]],
+      [32, [0, 63]],
+      [32, [0, 127]],
+      [32, [0, 255]],
+      [32, [1, 1]],
+      [32, [1, 3]],
+      [32, [1, 7]],
+      [32, [1, 15]],
+      [32, [1, 31]],
+      [32, [1, 63]],
+      [32, [1, 127]],
+      [32, [1, 255]]
     ];
 
     test.deepEqual(this.i2cWrite.args, expects);
@@ -578,22 +596,22 @@ exports["Expander - MCP23017"] = {
     }
 
     var expects = [
-      [ 32, [ 18, 1 ] ],
-      [ 32, [ 18, 3 ] ],
-      [ 32, [ 18, 7 ] ],
-      [ 32, [ 18, 15 ] ],
-      [ 32, [ 18, 31 ] ],
-      [ 32, [ 18, 63 ] ],
-      [ 32, [ 18, 127 ] ],
-      [ 32, [ 18, 255 ] ],
-      [ 32, [ 19, 1 ] ],
-      [ 32, [ 19, 3 ] ],
-      [ 32, [ 19, 7 ] ],
-      [ 32, [ 19, 15 ] ],
-      [ 32, [ 19, 31 ] ],
-      [ 32, [ 19, 63 ] ],
-      [ 32, [ 19, 127 ] ],
-      [ 32, [ 19, 255 ] ]
+      [32, [18, 1]],
+      [32, [18, 3]],
+      [32, [18, 7]],
+      [32, [18, 15]],
+      [32, [18, 31]],
+      [32, [18, 63]],
+      [32, [18, 127]],
+      [32, [18, 255]],
+      [32, [19, 1]],
+      [32, [19, 3]],
+      [32, [19, 7]],
+      [32, [19, 15]],
+      [32, [19, 31]],
+      [32, [19, 63]],
+      [32, [19, 127]],
+      [32, [19, 255]]
     ];
 
     test.deepEqual(this.i2cWrite.args, expects);
@@ -615,22 +633,22 @@ exports["Expander - MCP23017"] = {
     }
 
     var expects = [
-      [ 32, [ 12, 1 ] ],
-      [ 32, [ 12, 3 ] ],
-      [ 32, [ 12, 7 ] ],
-      [ 32, [ 12, 15 ] ],
-      [ 32, [ 12, 31 ] ],
-      [ 32, [ 12, 63 ] ],
-      [ 32, [ 12, 127 ] ],
-      [ 32, [ 12, 255 ] ],
-      [ 32, [ 13, 1 ] ],
-      [ 32, [ 13, 3 ] ],
-      [ 32, [ 13, 7 ] ],
-      [ 32, [ 13, 15 ] ],
-      [ 32, [ 13, 31 ] ],
-      [ 32, [ 13, 63 ] ],
-      [ 32, [ 13, 127 ] ],
-      [ 32, [ 13, 255 ] ]
+      [32, [12, 1]],
+      [32, [12, 3]],
+      [32, [12, 7]],
+      [32, [12, 15]],
+      [32, [12, 31]],
+      [32, [12, 63]],
+      [32, [12, 127]],
+      [32, [12, 255]],
+      [32, [13, 1]],
+      [32, [13, 3]],
+      [32, [13, 7]],
+      [32, [13, 15]],
+      [32, [13, 31]],
+      [32, [13, 63]],
+      [32, [13, 127]],
+      [32, [13, 255]]
     ];
 
     test.deepEqual(this.i2cWrite.args, expects);
@@ -654,26 +672,28 @@ exports["Expander - MCP23017"] = {
     }
 
     var expects = [
-      [ 32, 18, 1 ],
-      [ 32, 18, 1 ],
-      [ 32, 18, 1 ],
-      [ 32, 18, 1 ],
-      [ 32, 18, 1 ],
-      [ 32, 18, 1 ],
-      [ 32, 18, 1 ],
-      [ 32, 18, 1 ],
-      [ 32, 19, 1 ],
-      [ 32, 19, 1 ],
-      [ 32, 19, 1 ],
-      [ 32, 19, 1 ],
-      [ 32, 19, 1 ],
-      [ 32, 19, 1 ],
-      [ 32, 19, 1 ],
-      [ 32, 19, 1 ]
+      [32, 18, 1],
+      [32, 18, 1],
+      [32, 18, 1],
+      [32, 18, 1],
+      [32, 18, 1],
+      [32, 18, 1],
+      [32, 18, 1],
+      [32, 18, 1],
+      [32, 19, 1],
+      [32, 19, 1],
+      [32, 19, 1],
+      [32, 19, 1],
+      [32, 19, 1],
+      [32, 19, 1],
+      [32, 19, 1],
+      [32, 19, 1]
     ];
 
     test.deepEqual(
-      this.i2cRead.args.map(function(args) { return args.slice(0, -1); }),
+      this.i2cRead.args.map(function(args) {
+        return args.slice(0, -1);
+      }),
       expects
     );
 
@@ -787,7 +807,7 @@ exports["Expander - MCP23008"] = {
 
     // console.log(this.i2cWrite.getCall(0).args);
     // 2 For initialization
-    test.deepEqual(this.i2cWrite.getCall(0).args, [ 32, [ 0, 255 ] ]);
+    test.deepEqual(this.i2cWrite.getCall(0).args, [32, [0, 255]]);
 
     var byte = 0x100;
     var dir = 0;
@@ -795,8 +815,8 @@ exports["Expander - MCP23008"] = {
     var multiple = 2;
 
     for (var i = 1; i < 16; i += 2) {
-      test.deepEqual(this.i2cWrite.getCall(i).args, [ 32, [ dir, byte - multiple ] ]);
-      test.deepEqual(this.i2cWrite.getCall(i + 1).args, [ 32, [ gpio, byte - multiple ] ]);
+      test.deepEqual(this.i2cWrite.getCall(i).args, [32, [dir, byte - multiple]]);
+      test.deepEqual(this.i2cWrite.getCall(i + 1).args, [32, [gpio, byte - multiple]]);
 
       multiple <<= 1;
     }
@@ -824,14 +844,14 @@ exports["Expander - MCP23008"] = {
     }
 
     var expects = [
-      [ 32, [ 0, 1 ] ],
-      [ 32, [ 0, 3 ] ],
-      [ 32, [ 0, 7 ] ],
-      [ 32, [ 0, 15 ] ],
-      [ 32, [ 0, 31 ] ],
-      [ 32, [ 0, 63 ] ],
-      [ 32, [ 0, 127 ] ],
-      [ 32, [ 0, 255 ] ],
+      [32, [0, 1]],
+      [32, [0, 3]],
+      [32, [0, 7]],
+      [32, [0, 15]],
+      [32, [0, 31]],
+      [32, [0, 63]],
+      [32, [0, 127]],
+      [32, [0, 255]],
     ];
 
     test.deepEqual(this.i2cWrite.args, expects);
@@ -853,14 +873,14 @@ exports["Expander - MCP23008"] = {
     }
 
     var expects = [
-      [ 32, [ 9, 1 ] ],
-      [ 32, [ 9, 3 ] ],
-      [ 32, [ 9, 7 ] ],
-      [ 32, [ 9, 15 ] ],
-      [ 32, [ 9, 31 ] ],
-      [ 32, [ 9, 63 ] ],
-      [ 32, [ 9, 127 ] ],
-      [ 32, [ 9, 255 ] ],
+      [32, [9, 1]],
+      [32, [9, 3]],
+      [32, [9, 7]],
+      [32, [9, 15]],
+      [32, [9, 31]],
+      [32, [9, 63]],
+      [32, [9, 127]],
+      [32, [9, 255]],
     ];
 
     test.deepEqual(this.i2cWrite.args, expects);
@@ -882,14 +902,14 @@ exports["Expander - MCP23008"] = {
     }
 
     var expects = [
-      [ 32, [ 6, 1 ] ],
-      [ 32, [ 6, 3 ] ],
-      [ 32, [ 6, 7 ] ],
-      [ 32, [ 6, 15 ] ],
-      [ 32, [ 6, 31 ] ],
-      [ 32, [ 6, 63 ] ],
-      [ 32, [ 6, 127 ] ],
-      [ 32, [ 6, 255 ] ],
+      [32, [6, 1]],
+      [32, [6, 3]],
+      [32, [6, 7]],
+      [32, [6, 15]],
+      [32, [6, 31]],
+      [32, [6, 63]],
+      [32, [6, 127]],
+      [32, [6, 255]],
     ];
 
     test.deepEqual(this.i2cWrite.args, expects);
@@ -913,18 +933,20 @@ exports["Expander - MCP23008"] = {
     }
 
     var expects = [
-      [ 32, 9, 1 ],
-      [ 32, 9, 1 ],
-      [ 32, 9, 1 ],
-      [ 32, 9, 1 ],
-      [ 32, 9, 1 ],
-      [ 32, 9, 1 ],
-      [ 32, 9, 1 ],
-      [ 32, 9, 1 ]
+      [32, 9, 1],
+      [32, 9, 1],
+      [32, 9, 1],
+      [32, 9, 1],
+      [32, 9, 1],
+      [32, 9, 1],
+      [32, 9, 1],
+      [32, 9, 1]
     ];
 
     test.deepEqual(
-      this.i2cRead.args.map(function(args) { return args.slice(0, -1); }),
+      this.i2cRead.args.map(function(args) {
+        return args.slice(0, -1);
+      }),
       expects
     );
 
@@ -1035,25 +1057,25 @@ exports["Expander - PCF8574"] = {
     // 1 initialization call + (8 * (pinMode + digitalWrite))
     test.equal(this.i2cWrite.callCount, 16);
 
-    test.deepEqual(this.i2cWrite.getCall(0).args, [ 32, 0 ]);
+    test.deepEqual(this.i2cWrite.getCall(0).args, [32, 0]);
 
     test.deepEqual(this.i2cWrite.args, [
-      [ 32, 0 ],
-      [ 32, 0 ],
-      [ 32, 0 ],
-      [ 32, 0 ],
-      [ 32, 0 ],
-      [ 32, 0 ],
-      [ 32, 0 ],
-      [ 32, 0 ],
-      [ 32, 0 ],
-      [ 32, 0 ],
-      [ 32, 0 ],
-      [ 32, 0 ],
-      [ 32, 0 ],
-      [ 32, 0 ],
-      [ 32, 0 ],
-      [ 32, 0 ]
+      [32, 0],
+      [32, 0],
+      [32, 0],
+      [32, 0],
+      [32, 0],
+      [32, 0],
+      [32, 0],
+      [32, 0],
+      [32, 0],
+      [32, 0],
+      [32, 0],
+      [32, 0],
+      [32, 0],
+      [32, 0],
+      [32, 0],
+      [32, 0]
     ]);
 
     test.done();
@@ -1079,14 +1101,14 @@ exports["Expander - PCF8574"] = {
     }
 
     var expects = [
-      [ 32, 0 ],
-      [ 32, 0 ],
-      [ 32, 0 ],
-      [ 32, 0 ],
-      [ 32, 0 ],
-      [ 32, 0 ],
-      [ 32, 0 ],
-      [ 32, 0 ],
+      [32, 0],
+      [32, 0],
+      [32, 0],
+      [32, 0],
+      [32, 0],
+      [32, 0],
+      [32, 0],
+      [32, 0],
     ];
 
     test.deepEqual(this.i2cWrite.args, expects);
@@ -1104,14 +1126,14 @@ exports["Expander - PCF8574"] = {
     }
 
     var expects = [
-      [ 32, 0 ],
-      [ 32, 0 ],
-      [ 32, 0 ],
-      [ 32, 0 ],
-      [ 32, 0 ],
-      [ 32, 0 ],
-      [ 32, 0 ],
-      [ 32, 0 ],
+      [32, 0],
+      [32, 0],
+      [32, 0],
+      [32, 0],
+      [32, 0],
+      [32, 0],
+      [32, 0],
+      [32, 0],
     ];
 
 
@@ -1134,14 +1156,14 @@ exports["Expander - PCF8574"] = {
     }
 
     var expects = [
-      [ 32, 1 ],
-      [ 32, 3 ],
-      [ 32, 7 ],
-      [ 32, 15 ],
-      [ 32, 31 ],
-      [ 32, 63 ],
-      [ 32, 127 ],
-      [ 32, 255 ],
+      [32, 1],
+      [32, 3],
+      [32, 7],
+      [32, 15],
+      [32, 31],
+      [32, 63],
+      [32, 127],
+      [32, 255],
     ];
 
     test.deepEqual(this.i2cWrite.args, expects);
@@ -1165,18 +1187,20 @@ exports["Expander - PCF8574"] = {
     }
 
     var expects = [
-      [ 32, 1 ],
-      [ 32, 1 ],
-      [ 32, 1 ],
-      [ 32, 1 ],
-      [ 32, 1 ],
-      [ 32, 1 ],
-      [ 32, 1 ],
-      [ 32, 1 ]
+      [32, 1],
+      [32, 1],
+      [32, 1],
+      [32, 1],
+      [32, 1],
+      [32, 1],
+      [32, 1],
+      [32, 1]
     ];
 
     test.deepEqual(
-      this.i2cRead.args.map(function(args) { return args.slice(0, -1); }),
+      this.i2cRead.args.map(function(args) {
+        return args.slice(0, -1);
+      }),
       expects
     );
 
@@ -1287,25 +1311,25 @@ exports["Expander - PCF8574A"] = {
     // 1 initialization call + (8 * (pinMode + digitalWrite))
     test.equal(this.i2cWrite.callCount, 16);
 
-    test.deepEqual(this.i2cWrite.getCall(0).args, [ 56, 0 ]);
+    test.deepEqual(this.i2cWrite.getCall(0).args, [56, 0]);
 
     test.deepEqual(this.i2cWrite.args, [
-      [ 56, 0 ],
-      [ 56, 0 ],
-      [ 56, 0 ],
-      [ 56, 0 ],
-      [ 56, 0 ],
-      [ 56, 0 ],
-      [ 56, 0 ],
-      [ 56, 0 ],
-      [ 56, 0 ],
-      [ 56, 0 ],
-      [ 56, 0 ],
-      [ 56, 0 ],
-      [ 56, 0 ],
-      [ 56, 0 ],
-      [ 56, 0 ],
-      [ 56, 0 ]
+      [56, 0],
+      [56, 0],
+      [56, 0],
+      [56, 0],
+      [56, 0],
+      [56, 0],
+      [56, 0],
+      [56, 0],
+      [56, 0],
+      [56, 0],
+      [56, 0],
+      [56, 0],
+      [56, 0],
+      [56, 0],
+      [56, 0],
+      [56, 0]
     ]);
 
 
@@ -1332,14 +1356,14 @@ exports["Expander - PCF8574A"] = {
     }
 
     var expects = [
-      [ 56, 0 ],
-      [ 56, 0 ],
-      [ 56, 0 ],
-      [ 56, 0 ],
-      [ 56, 0 ],
-      [ 56, 0 ],
-      [ 56, 0 ],
-      [ 56, 0 ],
+      [56, 0],
+      [56, 0],
+      [56, 0],
+      [56, 0],
+      [56, 0],
+      [56, 0],
+      [56, 0],
+      [56, 0],
     ];
 
     test.deepEqual(this.i2cWrite.args, expects);
@@ -1357,14 +1381,14 @@ exports["Expander - PCF8574A"] = {
     }
 
     var expects = [
-      [ 56, 0 ],
-      [ 56, 0 ],
-      [ 56, 0 ],
-      [ 56, 0 ],
-      [ 56, 0 ],
-      [ 56, 0 ],
-      [ 56, 0 ],
-      [ 56, 0 ],
+      [56, 0],
+      [56, 0],
+      [56, 0],
+      [56, 0],
+      [56, 0],
+      [56, 0],
+      [56, 0],
+      [56, 0],
     ];
 
     test.deepEqual(this.i2cWrite.args, expects);
@@ -1386,14 +1410,14 @@ exports["Expander - PCF8574A"] = {
     }
 
     var expects = [
-      [ 56, 1 ],
-      [ 56, 3 ],
-      [ 56, 7 ],
-      [ 56, 15 ],
-      [ 56, 31 ],
-      [ 56, 63 ],
-      [ 56, 127 ],
-      [ 56, 255 ],
+      [56, 1],
+      [56, 3],
+      [56, 7],
+      [56, 15],
+      [56, 31],
+      [56, 63],
+      [56, 127],
+      [56, 255],
     ];
 
     test.deepEqual(this.i2cWrite.args, expects);
@@ -1417,18 +1441,20 @@ exports["Expander - PCF8574A"] = {
     }
 
     var expects = [
-      [ 56, 1 ],
-      [ 56, 1 ],
-      [ 56, 1 ],
-      [ 56, 1 ],
-      [ 56, 1 ],
-      [ 56, 1 ],
-      [ 56, 1 ],
-      [ 56, 1 ]
+      [56, 1],
+      [56, 1],
+      [56, 1],
+      [56, 1],
+      [56, 1],
+      [56, 1],
+      [56, 1],
+      [56, 1]
     ];
 
     test.deepEqual(
-      this.i2cRead.args.map(function(args) { return args.slice(0, -1); }),
+      this.i2cRead.args.map(function(args) {
+        return args.slice(0, -1);
+      }),
       expects
     );
 
@@ -1541,26 +1567,26 @@ exports["Expander - PCF8575"] = {
     // 1 initialization call + (8 * (pinMode + digitalWrite))
     test.equal(this.i2cWrite.callCount, 17);
 
-    test.deepEqual(this.i2cWrite.getCall(0).args, [ 32, [ 0, 0 ] ]);
+    test.deepEqual(this.i2cWrite.getCall(0).args, [32, [0, 0]]);
 
     test.deepEqual(this.i2cWrite.args, [
-      [ 32, [ 0, 0 ] ],
-      [ 32, [ 0, 0 ] ],
-      [ 32, [ 0, 0 ] ],
-      [ 32, [ 0, 0 ] ],
-      [ 32, [ 0, 0 ] ],
-      [ 32, [ 0, 0 ] ],
-      [ 32, [ 0, 0 ] ],
-      [ 32, [ 0, 0 ] ],
-      [ 32, [ 0, 0 ] ],
-      [ 32, [ 0, 0 ] ],
-      [ 32, [ 0, 0 ] ],
-      [ 32, [ 0, 0 ] ],
-      [ 32, [ 0, 0 ] ],
-      [ 32, [ 0, 0 ] ],
-      [ 32, [ 0, 0 ] ],
-      [ 32, [ 0, 0 ] ],
-      [ 32, [ 0, 0 ] ],
+      [32, [0, 0]],
+      [32, [0, 0]],
+      [32, [0, 0]],
+      [32, [0, 0]],
+      [32, [0, 0]],
+      [32, [0, 0]],
+      [32, [0, 0]],
+      [32, [0, 0]],
+      [32, [0, 0]],
+      [32, [0, 0]],
+      [32, [0, 0]],
+      [32, [0, 0]],
+      [32, [0, 0]],
+      [32, [0, 0]],
+      [32, [0, 0]],
+      [32, [0, 0]],
+      [32, [0, 0]],
     ]);
     test.done();
   },
@@ -1598,14 +1624,14 @@ exports["Expander - PCF8575"] = {
     }
 
     var expects = [
-      [ 32, [ 255, 0 ] ],
-      [ 32, [ 255, 0 ] ],
-      [ 32, [ 255, 0 ] ],
-      [ 32, [ 255, 0 ] ],
-      [ 32, [ 255, 0 ] ],
-      [ 32, [ 255, 0 ] ],
-      [ 32, [ 255, 0 ] ],
-      [ 32, [ 255, 0 ] ],
+      [32, [255, 0]],
+      [32, [255, 0]],
+      [32, [255, 0]],
+      [32, [255, 0]],
+      [32, [255, 0]],
+      [32, [255, 0]],
+      [32, [255, 0]],
+      [32, [255, 0]],
     ];
 
     test.deepEqual(this.i2cWrite.args, expects);
@@ -1629,18 +1655,20 @@ exports["Expander - PCF8575"] = {
     }
 
     var expects = [
-      [ 32, 2 ],
-      [ 32, 2 ],
-      [ 32, 2 ],
-      [ 32, 2 ],
-      [ 32, 2 ],
-      [ 32, 2 ],
-      [ 32, 2 ],
-      [ 32, 2 ],
+      [32, 2],
+      [32, 2],
+      [32, 2],
+      [32, 2],
+      [32, 2],
+      [32, 2],
+      [32, 2],
+      [32, 2],
     ];
 
     test.deepEqual(
-      this.i2cRead.args.map(function(args) { return args.slice(0, -1); }),
+      this.i2cRead.args.map(function(args) {
+        return args.slice(0, -1);
+      }),
       expects
     );
 
@@ -1755,22 +1783,22 @@ exports["Expander - PCA9685"] = {
     test.equal(this.i2cWriteReg.callCount, 5);
 
     test.deepEqual(this.i2cWrite.args, [
-      [ 64, [ 6, 0, 0, 4096, 16 ] ],
-      [ 64, [ 10, 0, 0, 4096, 16 ] ],
-      [ 64, [ 14, 0, 0, 4096, 16 ] ],
-      [ 64, [ 18, 0, 0, 4096, 16 ] ],
-      [ 64, [ 22, 0, 0, 4096, 16 ] ],
-      [ 64, [ 26, 0, 0, 4096, 16 ] ],
-      [ 64, [ 30, 0, 0, 4096, 16 ] ],
-      [ 64, [ 34, 0, 0, 4096, 16 ] ],
-      [ 64, [ 38, 0, 0, 4096, 16 ] ],
-      [ 64, [ 42, 0, 0, 4096, 16 ] ],
-      [ 64, [ 46, 0, 0, 4096, 16 ] ],
-      [ 64, [ 50, 0, 0, 4096, 16 ] ],
-      [ 64, [ 54, 0, 0, 4096, 16 ] ],
-      [ 64, [ 58, 0, 0, 4096, 16 ] ],
-      [ 64, [ 62, 0, 0, 4096, 16 ] ],
-      [ 64, [ 66, 0, 0, 4096, 16 ] ]
+      [64, [6, 0, 0, 4096, 16]],
+      [64, [10, 0, 0, 4096, 16]],
+      [64, [14, 0, 0, 4096, 16]],
+      [64, [18, 0, 0, 4096, 16]],
+      [64, [22, 0, 0, 4096, 16]],
+      [64, [26, 0, 0, 4096, 16]],
+      [64, [30, 0, 0, 4096, 16]],
+      [64, [34, 0, 0, 4096, 16]],
+      [64, [38, 0, 0, 4096, 16]],
+      [64, [42, 0, 0, 4096, 16]],
+      [64, [46, 0, 0, 4096, 16]],
+      [64, [50, 0, 0, 4096, 16]],
+      [64, [54, 0, 0, 4096, 16]],
+      [64, [58, 0, 0, 4096, 16]],
+      [64, [62, 0, 0, 4096, 16]],
+      [64, [66, 0, 0, 4096, 16]]
     ]);
 
     test.done();
@@ -1817,22 +1845,22 @@ exports["Expander - PCA9685"] = {
     }
 
     var expects = [
-      [ 64, [ 6, 4096, 16, 0, 0 ] ],
-      [ 64, [ 10, 4096, 16, 0, 0 ] ],
-      [ 64, [ 14, 4096, 16, 0, 0 ] ],
-      [ 64, [ 18, 4096, 16, 0, 0 ] ],
-      [ 64, [ 22, 4096, 16, 0, 0 ] ],
-      [ 64, [ 26, 4096, 16, 0, 0 ] ],
-      [ 64, [ 30, 4096, 16, 0, 0 ] ],
-      [ 64, [ 34, 4096, 16, 0, 0 ] ],
-      [ 64, [ 38, 4096, 16, 0, 0 ] ],
-      [ 64, [ 42, 4096, 16, 0, 0 ] ],
-      [ 64, [ 46, 4096, 16, 0, 0 ] ],
-      [ 64, [ 50, 4096, 16, 0, 0 ] ],
-      [ 64, [ 54, 4096, 16, 0, 0 ] ],
-      [ 64, [ 58, 4096, 16, 0, 0 ] ],
-      [ 64, [ 62, 4096, 16, 0, 0 ] ],
-      [ 64, [ 66, 4096, 16, 0, 0 ] ],
+      [64, [6, 4096, 16, 0, 0]],
+      [64, [10, 4096, 16, 0, 0]],
+      [64, [14, 4096, 16, 0, 0]],
+      [64, [18, 4096, 16, 0, 0]],
+      [64, [22, 4096, 16, 0, 0]],
+      [64, [26, 4096, 16, 0, 0]],
+      [64, [30, 4096, 16, 0, 0]],
+      [64, [34, 4096, 16, 0, 0]],
+      [64, [38, 4096, 16, 0, 0]],
+      [64, [42, 4096, 16, 0, 0]],
+      [64, [46, 4096, 16, 0, 0]],
+      [64, [50, 4096, 16, 0, 0]],
+      [64, [54, 4096, 16, 0, 0]],
+      [64, [58, 4096, 16, 0, 0]],
+      [64, [62, 4096, 16, 0, 0]],
+      [64, [66, 4096, 16, 0, 0]],
     ];
     test.deepEqual(this.i2cWrite.args, expects);
 
@@ -1849,22 +1877,22 @@ exports["Expander - PCA9685"] = {
     }
 
     var expects = [
-      [ 64, [ 6, 4096, 16, 0, 0 ] ],
-      [ 64, [ 10, 4096, 16, 0, 0 ] ],
-      [ 64, [ 14, 4096, 16, 0, 0 ] ],
-      [ 64, [ 18, 4096, 16, 0, 0 ] ],
-      [ 64, [ 22, 4096, 16, 0, 0 ] ],
-      [ 64, [ 26, 4096, 16, 0, 0 ] ],
-      [ 64, [ 30, 4096, 16, 0, 0 ] ],
-      [ 64, [ 34, 4096, 16, 0, 0 ] ],
-      [ 64, [ 38, 4096, 16, 0, 0 ] ],
-      [ 64, [ 42, 4096, 16, 0, 0 ] ],
-      [ 64, [ 46, 4096, 16, 0, 0 ] ],
-      [ 64, [ 50, 4096, 16, 0, 0 ] ],
-      [ 64, [ 54, 4096, 16, 0, 0 ] ],
-      [ 64, [ 58, 4096, 16, 0, 0 ] ],
-      [ 64, [ 62, 4096, 16, 0, 0 ] ],
-      [ 64, [ 66, 4096, 16, 0, 0 ] ],
+      [64, [6, 4096, 16, 0, 0]],
+      [64, [10, 4096, 16, 0, 0]],
+      [64, [14, 4096, 16, 0, 0]],
+      [64, [18, 4096, 16, 0, 0]],
+      [64, [22, 4096, 16, 0, 0]],
+      [64, [26, 4096, 16, 0, 0]],
+      [64, [30, 4096, 16, 0, 0]],
+      [64, [34, 4096, 16, 0, 0]],
+      [64, [38, 4096, 16, 0, 0]],
+      [64, [42, 4096, 16, 0, 0]],
+      [64, [46, 4096, 16, 0, 0]],
+      [64, [50, 4096, 16, 0, 0]],
+      [64, [54, 4096, 16, 0, 0]],
+      [64, [58, 4096, 16, 0, 0]],
+      [64, [62, 4096, 16, 0, 0]],
+      [64, [66, 4096, 16, 0, 0]],
     ];
 
     test.deepEqual(this.i2cWrite.args, expects);
@@ -1882,22 +1910,22 @@ exports["Expander - PCA9685"] = {
     }
 
     var expects = [
-      [ 64, [ 6, 0, 0, 1023, 3 ] ],
-      [ 64, [ 10, 0, 0, 1023, 3 ] ],
-      [ 64, [ 14, 0, 0, 1023, 3 ] ],
-      [ 64, [ 18, 0, 0, 1023, 3 ] ],
-      [ 64, [ 22, 0, 0, 1023, 3 ] ],
-      [ 64, [ 26, 0, 0, 1023, 3 ] ],
-      [ 64, [ 30, 0, 0, 1023, 3 ] ],
-      [ 64, [ 34, 0, 0, 1023, 3 ] ],
-      [ 64, [ 38, 0, 0, 1023, 3 ] ],
-      [ 64, [ 42, 0, 0, 1023, 3 ] ],
-      [ 64, [ 46, 0, 0, 1023, 3 ] ],
-      [ 64, [ 50, 0, 0, 1023, 3 ] ],
-      [ 64, [ 54, 0, 0, 1023, 3 ] ],
-      [ 64, [ 58, 0, 0, 1023, 3 ] ],
-      [ 64, [ 62, 0, 0, 1023, 3 ] ],
-      [ 64, [ 66, 0, 0, 1023, 3 ] ],
+      [64, [6, 0, 0, 1023, 3]],
+      [64, [10, 0, 0, 1023, 3]],
+      [64, [14, 0, 0, 1023, 3]],
+      [64, [18, 0, 0, 1023, 3]],
+      [64, [22, 0, 0, 1023, 3]],
+      [64, [26, 0, 0, 1023, 3]],
+      [64, [30, 0, 0, 1023, 3]],
+      [64, [34, 0, 0, 1023, 3]],
+      [64, [38, 0, 0, 1023, 3]],
+      [64, [42, 0, 0, 1023, 3]],
+      [64, [46, 0, 0, 1023, 3]],
+      [64, [50, 0, 0, 1023, 3]],
+      [64, [54, 0, 0, 1023, 3]],
+      [64, [58, 0, 0, 1023, 3]],
+      [64, [62, 0, 0, 1023, 3]],
+      [64, [66, 0, 0, 1023, 3]],
     ];
 
     test.deepEqual(this.i2cWrite.args, expects);
@@ -1915,22 +1943,22 @@ exports["Expander - PCA9685"] = {
     }
 
     var expects = [
-      [ 64, [ 6, 4096, 16, 0, 0 ] ],
-      [ 64, [ 10, 4096, 16, 0, 0 ] ],
-      [ 64, [ 14, 4096, 16, 0, 0 ] ],
-      [ 64, [ 18, 4096, 16, 0, 0 ] ],
-      [ 64, [ 22, 4096, 16, 0, 0 ] ],
-      [ 64, [ 26, 4096, 16, 0, 0 ] ],
-      [ 64, [ 30, 4096, 16, 0, 0 ] ],
-      [ 64, [ 34, 4096, 16, 0, 0 ] ],
-      [ 64, [ 38, 4096, 16, 0, 0 ] ],
-      [ 64, [ 42, 4096, 16, 0, 0 ] ],
-      [ 64, [ 46, 4096, 16, 0, 0 ] ],
-      [ 64, [ 50, 4096, 16, 0, 0 ] ],
-      [ 64, [ 54, 4096, 16, 0, 0 ] ],
-      [ 64, [ 58, 4096, 16, 0, 0 ] ],
-      [ 64, [ 62, 4096, 16, 0, 0 ] ],
-      [ 64, [ 66, 4096, 16, 0, 0 ] ],
+      [64, [6, 4096, 16, 0, 0]],
+      [64, [10, 4096, 16, 0, 0]],
+      [64, [14, 4096, 16, 0, 0]],
+      [64, [18, 4096, 16, 0, 0]],
+      [64, [22, 4096, 16, 0, 0]],
+      [64, [26, 4096, 16, 0, 0]],
+      [64, [30, 4096, 16, 0, 0]],
+      [64, [34, 4096, 16, 0, 0]],
+      [64, [38, 4096, 16, 0, 0]],
+      [64, [42, 4096, 16, 0, 0]],
+      [64, [46, 4096, 16, 0, 0]],
+      [64, [50, 4096, 16, 0, 0]],
+      [64, [54, 4096, 16, 0, 0]],
+      [64, [58, 4096, 16, 0, 0]],
+      [64, [62, 4096, 16, 0, 0]],
+      [64, [66, 4096, 16, 0, 0]],
     ];
 
     test.deepEqual(this.i2cWrite.args, expects);
@@ -2083,11 +2111,13 @@ exports["Expander - PCF8591"] = {
     }
 
     var expects = [
-      [ 72, 4 ],
+      [72, 4],
     ];
 
     test.deepEqual(
-      this.i2cRead.args.map(function(args) { return args.slice(0, -1); }),
+      this.i2cRead.args.map(function(args) {
+        return args.slice(0, -1);
+      }),
       expects
     );
 
@@ -2100,8 +2130,9 @@ exports["Expander - PCF8591"] = {
     test.equal(spy.callCount, 4);
 
     test.deepEqual(
-      spy.args.map(function(args) { return args[0]; }),
-      [0x00 << 2, 0x0f << 2, 0xf0 << 2, 0xff << 2]
+      spy.args.map(function(args) {
+        return args[0];
+      }), [0x00 << 2, 0x0f << 2, 0xf0 << 2, 0xff << 2]
     );
 
     test.done();
@@ -2182,14 +2213,14 @@ exports["Expander - MUXSHIELD2"] = {
 
     test.equal(this.pinMode.callCount, 8);
     test.deepEqual(this.pinMode.args, [
-      [ 2, 1 ],
-      [ 4, 1 ],
-      [ 6, 1 ],
-      [ 7, 1 ],
-      [ 8, 1 ],
-      [ 10, 1 ],
-      [ 11, 1 ],
-      [ 12, 1 ]
+      [2, 1],
+      [4, 1],
+      [6, 1],
+      [7, 1],
+      [8, 1],
+      [10, 1],
+      [11, 1],
+      [12, 1]
     ]);
     test.equal(this.digitalWrite.callCount, 1);
     test.done();
@@ -2464,57 +2495,57 @@ exports["Expander - GROVEPI"] = {
     test.deepEqual(this.i2cWrite.args, [
       // pinMode(pin, OUTPUT)
       // [0x05, pin, 1, (empty)]
-      [ 4, [ 5, 2, 1, 0 ] ],
+      [4, [5, 2, 1, 0]],
       // digitalWrite(pin, LOW)
       // [0x02, pin, LOW, (empty)]
-      [ 4, [ 2, 2, 0, 0 ] ],
+      [4, [2, 2, 0, 0]],
       // pinMode(pin, OUTPUT)
       // [0x05, pin, 1, (empty)]
-      [ 4, [ 5, 3, 1, 0 ] ],
+      [4, [5, 3, 1, 0]],
       // digitalWrite(pin, LOW)
       // [0x02, pin, LOW, (empty)]
-      [ 4, [ 2, 3, 0, 0 ] ],
+      [4, [2, 3, 0, 0]],
       // pinMode(pin, OUTPUT)
       // [0x05, pin, 1, (empty)]
-      [ 4, [ 5, 4, 1, 0 ] ],
+      [4, [5, 4, 1, 0]],
       // digitalWrite(pin, LOW)
       // [0x02, pin, LOW, (empty)]
-      [ 4, [ 2, 4, 0, 0 ] ],
+      [4, [2, 4, 0, 0]],
       // pinMode(pin, OUTPUT)
       // [0x05, pin, 1, (empty)]
-      [ 4, [ 5, 5, 1, 0 ] ],
+      [4, [5, 5, 1, 0]],
       // digitalWrite(pin, LOW)
       // [0x02, pin, LOW, (empty)]
-      [ 4, [ 2, 5, 0, 0 ] ],
+      [4, [2, 5, 0, 0]],
       // pinMode(pin, OUTPUT)
       // [0x05, pin, 1, (empty)]
-      [ 4, [ 5, 6, 1, 0 ] ],
+      [4, [5, 6, 1, 0]],
       // digitalWrite(pin, LOW)
       // [0x02, pin, LOW, (empty)]
-      [ 4, [ 2, 6, 0, 0 ] ],
+      [4, [2, 6, 0, 0]],
       // pinMode(pin, OUTPUT)
       // [0x05, pin, 1, (empty)]
-      [ 4, [ 5, 7, 1, 0 ] ],
+      [4, [5, 7, 1, 0]],
       // digitalWrite(pin, LOW)
       // [0x02, pin, LOW, (empty)]
-      [ 4, [ 2, 7, 0, 0 ] ],
+      [4, [2, 7, 0, 0]],
       // pinMode(pin, OUTPUT)
       // [0x05, pin, 1, (empty)]
-      [ 4, [ 5, 8, 1, 0 ] ],
+      [4, [5, 8, 1, 0]],
       // digitalWrite(pin, LOW)
       // [0x02, pin, LOW, (empty)]
-      [ 4, [ 2, 8, 0, 0 ] ],
+      [4, [2, 8, 0, 0]],
 
       // Analog pins are set to INPUT (0)
       // pinMode(pin, ANALOG => INPUT)
       // [0x05, pin, INPUT, (empty)]
-      [ 4, [ 5, 14, 0, 0 ] ],
+      [4, [5, 14, 0, 0]],
       // pinMode(pin, ANALOG => INPUT)
       // [0x05, pin, INPUT, (empty)]
-      [ 4, [ 5, 15, 0, 0 ] ],
+      [4, [5, 15, 0, 0]],
       // pinMode(pin, ANALOG => INPUT)
       // [0x05, pin, INPUT, (empty)]
-      [ 4, [ 5, 16, 0, 0 ] ],
+      [4, [5, 16, 0, 0]],
     ]);
     test.done();
   },
@@ -2558,25 +2589,25 @@ exports["Expander - GROVEPI"] = {
     test.deepEqual(this.i2cWrite.args, [
       // pinMode(pin, INPUT)
       // [0x05, pin, 0, (empty)]
-      [ 4, [ 5, 2, 0, 0 ] ],
+      [4, [5, 2, 0, 0]],
       // pinMode(pin, INPUT)
       // [0x05, pin, 0, (empty)]
-      [ 4, [ 5, 3, 0, 0 ] ],
+      [4, [5, 3, 0, 0]],
       // pinMode(pin, INPUT)
       // [0x05, pin, 0, (empty)]
-      [ 4, [ 5, 4, 0, 0 ] ],
+      [4, [5, 4, 0, 0]],
       // pinMode(pin, INPUT)
       // [0x05, pin, 0, (empty)]
-      [ 4, [ 5, 5, 0, 0 ] ],
+      [4, [5, 5, 0, 0]],
       // pinMode(pin, INPUT)
       // [0x05, pin, 0, (empty)]
-      [ 4, [ 5, 6, 0, 0 ] ],
+      [4, [5, 6, 0, 0]],
       // pinMode(pin, INPUT)
       // [0x05, pin, 0, (empty)]
-      [ 4, [ 5, 7, 0, 0 ] ],
+      [4, [5, 7, 0, 0]],
       // pinMode(pin, INPUT)
       // [0x05, pin, 0, (empty)]
-      [ 4, [ 5, 8, 0, 0 ] ],
+      [4, [5, 8, 0, 0]],
     ]);
 
     test.done();
@@ -2595,13 +2626,13 @@ exports["Expander - GROVEPI"] = {
     test.deepEqual(this.i2cWrite.args, [
       // pinMode(pin, INPUT)
       // [0x05, pin, 0, (empty)]
-      [ 4, [ 5, 14, 0, 0 ] ],
+      [4, [5, 14, 0, 0]],
       // pinMode(pin, INPUT)
       // [0x05, pin, 0, (empty)]
-      [ 4, [ 5, 15, 0, 0 ] ],
+      [4, [5, 15, 0, 0]],
       // pinMode(pin, INPUT)
       // [0x05, pin, 0, (empty)]
-      [ 4, [ 5, 16, 0, 0 ] ],
+      [4, [5, 16, 0, 0]],
     ]);
 
     test.done();
@@ -2687,7 +2718,9 @@ exports["Expander - GROVEPI"] = {
   digitalRead: function(test) {
     test.expect(45);
 
-    var spies = [null, null].concat(Array.from({length: 7}, function() {
+    var spies = [null, null].concat(Array.from({
+      length: 7
+    }, function() {
       return this.sandbox.spy();
     }.bind(this)));
 
@@ -2980,6 +3013,184 @@ exports["Expander - 74HC595"] = {
     test.equal(
       this.expander.i2cRead.lastCall.exception.message,
       "Expander:74HC595 does not support i2cRead"
+    );
+
+    test.done();
+  },
+};
+
+exports["Expander - CD74HC4067"] = {
+  setUp: function(done) {
+    this.sandbox = sinon.sandbox.create();
+    this.clock = this.sandbox.useFakeTimers();
+
+    this.i2cConfig = this.sandbox.spy(MockFirmata.prototype, "i2cConfig");
+    this.i2cWrite = this.sandbox.spy(MockFirmata.prototype, "i2cWrite");
+    this.i2cRead = this.sandbox.spy(MockFirmata.prototype, "i2cRead");
+
+    this.board = newBoard();
+    this.debounce = this.sandbox.stub(Fn, "debounce", function(fn) {
+      return fn;
+    });
+
+
+    this.expander = new Expander({
+      controller: "CD74HC4067",
+      board: this.board
+    });
+
+    this.virtual = new Board.Virtual({
+      io: this.expander
+    });
+
+    done();
+  },
+
+  tearDown: function(done) {
+    Board.purge();
+    Expander.purge();
+    this.sandbox.restore();
+    done();
+  },
+
+  fwdOptionsToi2cConfig: function(test) {
+    test.expect(3);
+
+    this.i2cConfig.reset();
+
+    new Expander({
+      controller: "CD74HC4067",
+      address: 0xff,
+      bus: "i2c-1",
+      board: this.board
+    });
+
+    var forwarded = this.i2cConfig.lastCall.args[0];
+
+    test.equal(this.i2cConfig.callCount, 1);
+    test.equal(forwarded.address, 0xff);
+    test.equal(forwarded.bus, "i2c-1");
+
+    test.done();
+  },
+
+  initialization: function(test) {
+    test.expect(1);
+    test.equal(this.i2cConfig.callCount, 1);
+    test.done();
+  },
+
+  normalize: function(test) {
+    test.expect(16);
+
+    for (var i = 0; i < 16; i++) {
+      test.equal(this.expander.normalize(i), i);
+    }
+
+    test.done();
+  },
+
+  normalizeString: function(test) {
+    test.expect(16);
+
+    for (var i = 0; i < 16; i++) {
+      test.equal(this.expander.normalize("A" + i), i);
+    }
+
+    test.done();
+  },
+
+  pinMode: function(test) {
+    test.expect(17);
+
+    this.i2cWrite.reset();
+
+    for (var i = 0; i < 16; i++) {
+      this.expander.pinMode(i, 2);
+      test.equal(this.expander.pins[i].mode, 2);
+    }
+
+    test.deepEqual(this.i2cWrite.callCount, 0);
+
+    test.done();
+  },
+
+  analogRead: function(test) {
+    test.expect(11);
+
+    var spy = this.sandbox.spy();
+
+    var data = [3, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 255];
+
+
+    this.expander.pinMode(0, 2);
+    this.expander.pinMode(7, 2);
+    this.expander.pinMode(15, 2);
+
+    this.i2cRead.reset();
+
+    this.expander.analogRead(0, spy);
+    this.expander.analogRead(7, spy);
+    this.expander.analogRead(15, spy);
+
+    test.equal(this.i2cWrite.callCount, 3);
+    test.equal(this.i2cWrite.getCall(0).args[1], 0);
+    test.equal(this.i2cWrite.getCall(1).args[1], 7);
+    test.equal(this.i2cWrite.getCall(2).args[1], 15);
+
+    test.equal(this.i2cWrite.getCall(0).args[2], 1);
+    test.equal(this.i2cWrite.getCall(1).args[2], 1);
+    test.equal(this.i2cWrite.getCall(2).args[2], 1);
+
+    test.equal(this.i2cRead.callCount, 1);
+    test.equal(this.i2cRead.lastCall.args[1], 32);
+
+    var i2cRead = this.i2cRead.lastCall.args[2];
+
+    i2cRead(data);
+
+    test.equal(spy.callCount, 3);
+
+
+
+    test.deepEqual(
+      spy.args.map(function(args) {
+        return args[0];
+      }), [1023, 1023, 1023]
+    );
+
+    test.done();
+  },
+
+  unsupported: function(test) {
+    test.expect(8);
+
+    this.sandbox.spy(this.expander, "digitalRead");
+    test.throws(this.expander.digitalRead);
+    test.equal(
+      this.expander.digitalRead.lastCall.exception.message,
+      "Expander:CD74HC4067 does not support digitalRead"
+    );
+
+    this.sandbox.spy(this.expander, "digitalWrite");
+    test.throws(this.expander.digitalWrite);
+    test.equal(
+      this.expander.digitalWrite.lastCall.exception.message,
+      "Expander:CD74HC4067 does not support digitalWrite"
+    );
+
+    this.sandbox.spy(this.expander, "i2cWrite");
+    test.throws(this.expander.i2cWrite);
+    test.equal(
+      this.expander.i2cWrite.lastCall.exception.message,
+      "Expander:CD74HC4067 does not support i2cWrite"
+    );
+
+    this.sandbox.spy(this.expander, "i2cRead");
+    test.throws(this.expander.i2cRead);
+    test.equal(
+      this.expander.i2cRead.lastCall.exception.message,
+      "Expander:CD74HC4067 does not support i2cRead"
     );
 
     test.done();

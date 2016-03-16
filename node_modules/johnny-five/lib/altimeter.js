@@ -31,8 +31,43 @@ var Controllers = {
         return raw;
       }
     }
+  },
+  MS5611: {
+    initialize: {
+      value: function(opts, dataHandler) {
+        var Multi = require("./imu");
+        var driver = Multi.Drivers.get(this.board, "MS5611", opts);
+        driver.on("data", function(data) {
+          dataHandler(data.altitude);
+        });
+      }
+    },
+    toMeters: {
+      value: function(raw) {
+        return raw;
+      }
+    }
+  },
+
+  BMP180: {
+    initialize: {
+      value: function(opts, dataHandler) {
+        var Multi = require("./imu");
+        var driver = Multi.Drivers.get(this.board, "BMP180", opts);
+        driver.on("data", function(data) {
+          dataHandler(data.altitude);
+        });
+      }
+    },
+    toMeters: {
+      value: function(raw) {
+        return raw;
+      }
+    }
   }
 };
+
+Controllers["BMP085"] = Controllers["BMP-085"] = Controllers.BMP180;
 
 var priv = new Map();
 
@@ -64,7 +99,9 @@ function Altimeter(opts) {
   Board.Controller.call(this, controller, opts);
 
   if (!this.toMeters) {
-    this.toMeters = opts.toMeters || function(x) { return x; };
+    this.toMeters = opts.toMeters || function(x) {
+      return x;
+    };
   }
 
   var propDescriptors = {
