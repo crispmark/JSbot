@@ -61,7 +61,7 @@ function runCommand (msg) {
 }
 
 function customSpeed(dx, dy) {
-  var turnReduction = 0.5;
+  var turnReduction = 0.75;
   var m1speed = dy + Math.floor(dx*turnReduction);
   var m2speed = dy - Math.floor(dx*turnReduction);
 
