@@ -74,14 +74,14 @@ function reverse (speed) {
 }
 
 function left (speed) {
-  m1.rev(speed);
-  m2.fwd(speed * SPEED_MOD);
+  m1.fwd(speed);
+  m2.rev(speed * SPEED_MOD);
   backLed.stop().on();
 }
 
 function right (speed) {
-  m1.fwd(speed);
-  m2.rev(speed * SPEED_MOD);
+  m1.rev(speed);
+  m2.fwd(speed * SPEED_MOD);
   backLed.stop().on();
 }
 
