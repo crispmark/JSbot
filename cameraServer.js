@@ -1,12 +1,12 @@
 var camera = require('./camera.js');
 var STREAM_SECRET = require('secure-random').randomArray(40).map(code => code.toString(16)).join('')
 
-var STREAM_PORT = 8082,
-	WEBSOCKET_PORT = 8084,
-	STREAM_MAGIC_BYTES = 'jsmp'; // Must be 4 bytes
+var STREAM_PORT = 8082;
+var WEBSOCKET_PORT = 8084;
+var STREAM_MAGIC_BYTES = 'jsmp'; // Must be 4 bytes
 
-var width = 640,
-	height = 480;
+var width = 640;
+var height = 480;
 
 var socketServer = new(require('ws').Server)({
 	port: WEBSOCKET_PORT
@@ -31,14 +31,6 @@ socketServer.on('connection', function(socket) {
 });
 
 socketServer.broadcast = function(data, opts) {
-	// for (var i in this.clients) {
-	// 	if (this.clients[i].readyState == 1) {
-	// 		this.clients[i].send(data, opts);
-	// 	}
-	// 	else {
-	// 		console.log('i:', i, '\nclients:', this.clients);
-	// 	}
-	// }
 	this.clients.forEach( function(client, i) {
 		if (client.readyState == 1) {
 			client.send(data, opts);
@@ -48,7 +40,6 @@ socketServer.broadcast = function(data, opts) {
 		}
 	});
 };
-
 
 // HTTP Server to accept incomming MPEG Stream
 var streamServer = require('http').createServer(function(request, response) {
