@@ -12,12 +12,16 @@ const configs = five.Motor.SHIELD_CONFIGS.ADAFRUIT_V2;
 var m1;
 var m2;
 var backLed;
+var leftLed;
+var rightLed;
 
 board.on('ready', function() {
   m1 = new five.Motor(configs.M1);
   m2 = new five.Motor(configs.M2);
   backLed = new five.Led('GPIO21');
+  rightLed = new five.Led('GPIO4');
   backLed.on();
+  rightLed.on();
 });
 
 const SPEED = 160;
@@ -81,30 +85,35 @@ function forward (speed) {
   m1.fwd(speed);
   m2.fwd(speed * SPEED_MOD);
   backLed.stop().on();
+  rightLed.stop().on();
 }
 
 function reverse (speed) {
   m1.rev(speed);
   m2.rev(speed * SPEED_MOD);
-  backLed.blink('150');
+  backLed.blink(150);
+  rightLed.stop().on();
 }
 
 function left (speed) {
   m1.fwd(speed);
   m2.rev(speed * SPEED_MOD);
   backLed.stop().on();
+  rightLed.stop().on();
 }
 
 function right (speed) {
   m1.rev(speed);
   m2.fwd(speed * SPEED_MOD);
   backLed.stop().on();
+  rightLed.blink(150)
 }
 
 function stop() {
   m1.stop();
   m2.stop();
   backLed.stop().on();
+  rightLed.stop().on();
 }
 
 module.exports = { runCommand: runCommand };
