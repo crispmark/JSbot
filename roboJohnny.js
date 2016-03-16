@@ -41,25 +41,41 @@ function runCommand (msg) {
     var command = msg.command;
 
     switch(command) {
+      case commands.CUSTOM:
+      customSpeed(msg.dx, msg.dy);
+      break;
       case commands.FORWARD:
-        forward(SPEED);
-        break;
+      forward(SPEED);
+      break;
       case commands.REVERSE:
-        reverse(SPEED);
-        break;
+      reverse(SPEED);
+      break;
       case commands.TURN_LEFT:
-        left(TURN_SPEED);
-        break;
+      left(TURN_SPEED);
+      break;
       case commands.TURN_RIGHT:
-        right(TURN_SPEED);
-        break;
+      right(TURN_SPEED);
+      break;
       case commands.STOP:
-        stop();
-        break;
+      stop();
+      break;
     }
   }
 }
 
+function customSpeed(dx, dy) {
+  var turnReduction = 0.75;
+  var m1speed = dy + Math.floor(dx*turnReduction);
+  var m2speed = dy - Math.floor(dx*turnReduction);
+
+  if (m1speed < 0)
+  m1.fwd(Math.abs(m1speed));
+  else m1.rev(m1speed);
+
+  if (m2speed < 0)
+  m2.fwd(Math.abs(m2speed));
+  else m2.rev(m2speed);
+}
 // SPEED_MOD compensates for tendency to drift to one side over time
 function forward (speed) {
   m1.fwd(speed);

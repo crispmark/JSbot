@@ -7,6 +7,10 @@ app.get('/', function(req, res){
   res.sendFile(__dirname + '/index.html');
 });
 
+app.get('/joystick', function(req, res){
+  res.sendFile(__dirname + '/joystick.html');
+});
+
 // initialize http server using express app, start listening on port
 const http = require('http').Server(app);
 const port = 3000;
