@@ -93,10 +93,12 @@
 	  componentDidMount: function componentDidMount() {
 	    var select = document.querySelector("select");
 	    select.addEventListener("change", this.handleSelect);
+	    select.addEventListener("keydown", preventDefault);
 	  },
 	  componentWillUnmount: function componentWillUnmount() {
 	    var select = document.querySelector("select");
 	    select.removeEventListener("change", this.handleSelect);
+	    select.removeEventListener("keydown", preventDefault);
 	  },
 	
 	  componentDidUpdate: function componentDidUpdate() {
@@ -170,6 +172,10 @@
 	    );
 	  }
 	});
+	
+	function preventDefault(e) {
+	  e.preventDefault();
+	}
 	
 	function getControlPad(controls) {
 	  switch (controls) {

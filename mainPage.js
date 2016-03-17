@@ -22,10 +22,12 @@ var MainPage = React.createClass({
   componentDidMount: function() {
     var select = document.querySelector("select");
     select.addEventListener("change", this.handleSelect);
+    select.addEventListener("keydown", preventDefault);
   },
   componentWillUnmount: function() {
     var select = document.querySelector("select");
     select.removeEventListener("change", this.handleSelect);
+    select.removeEventListener("keydown", preventDefault);
   },
 
   componentDidUpdate: function() {
@@ -77,6 +79,10 @@ var MainPage = React.createClass({
     );
   }
 });
+
+function preventDefault(e) {
+  e.preventDefault();
+}
 
 function getControlPad(controls) {
   switch(controls) {
