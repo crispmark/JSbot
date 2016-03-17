@@ -57,7 +57,7 @@ var MainPage = React.createClass({
       <div>
         {header}
         <div id="joystick">
-          <div>
+          <div className="belowHeader">
         <main>
           <canvas id="videoCanvas" width="640" height="480">
             <p>

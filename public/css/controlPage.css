@@ -79,6 +79,10 @@ select {
   background-color: #009688;
 }
 
+.belowHeader {
+  display: flex;
+}
+
 .footer {
   text-align: center;
   color: white;
@@ -109,5 +113,5 @@ select {
     border-radius: 2px;
     margin: 0px 0px;
     transition:all 0.5s ease-in-out;
-  }  
+  }
 }
