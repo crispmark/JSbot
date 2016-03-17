@@ -120,7 +120,7 @@ select {
     max-height: 60vh;
     border: 2px solid #009688;
     border-radius: 2px;
-    margin: 0px 0px;
+    margin: 10px 0px;
     transition:all 0.5s ease-in-out;
   }
 
@@ -150,6 +150,7 @@ select {
     background: url(/img/arrow_right50-active.png) no-repeat;
   }
   button, button:active {
+    margin: 5px;
     border: 0px;
     width: 50px;
     height: 50px;
