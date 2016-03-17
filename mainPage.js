@@ -54,7 +54,7 @@ var MainPage = React.createClass({
     var footer = createFooter();
     var controlPad = getControlPad(this.state.controls);
     return(
-      <div>
+      <div className="belowContainer">
         {header}
         <div id="joystick">
           <div className="belowHeader">

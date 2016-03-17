@@ -125,7 +125,7 @@
 	    var controlPad = getControlPad(this.state.controls);
 	    return _react2.default.createElement(
 	      'div',
-	      null,
+	      { className: 'belowContainer' },
 	      header,
 	      _react2.default.createElement(
 	        'div',

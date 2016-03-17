@@ -78,12 +78,21 @@ select {
   margin: 0px;
   background-color: #009688;
 }
-
+.belowContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: 100vh;
+}
 .belowHeader {
   display: flex;
-flex-direction: column;
+  justify-content: space-between;
+  flex-direction: column;
 }
-
+#joystick {
+  flex-grow: 1;
+  display: flex;
+}
 .footer {
   text-align: center;
   color: white;
