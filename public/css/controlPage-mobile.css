@@ -15,12 +15,14 @@ main {
   internal size. */
   width: auto;
   height: auto;
-max-width: 100%;
-max-height: 100%;
+max-width: 100vw;
+max-height: 80vh;
   border: 2px solid #009688;
   border-radius: 2px;
-  margin: 20px 0px;
+  margin: 0px 0px;
+transition:all 0.5s ease-in-out;
 }
+
 .allButtons {
   text-align: center;
   -webkit-user-select: none;  /* Chrome all / Safari all */
