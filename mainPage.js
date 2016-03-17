@@ -26,9 +26,15 @@ var MainPage = React.createClass({
     select.removeEventListener("change", this.handleSelect);
   },
   componentDidUpdate: function() {
-    if (this.state.controls === "joystick") {
-      console.log('added joystick');
-      addJoystick();
+    if(this.state.jstick) {
+      if (this.state.controls === "dpad") {
+        this.state.jstick.destroy();
+        this.state.setState({joystick: undefined})
+      }
+    }
+    else if (this.state.controls === "joystick") {
+      var jstick = addJoystick();
+      this.setState({joystick: jstick});
     }
   },
 
