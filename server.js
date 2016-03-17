@@ -13,7 +13,7 @@ app.get('/joystick', function(req, res){
 
 // initialize http server using express app, start listening on port
 const http = require('http').Server(app);
-const port = 3002;
+const port = 3000;
 http.listen(port, function(){
   console.log('listening on *:', port);
 });

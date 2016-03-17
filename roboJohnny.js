@@ -30,7 +30,7 @@ board.on('ready', function() {
 });
 
 const SPEED = 160;
-const TURN_SPEED = 255;
+const TURN_SPEED = 160;
 const SPEED_MOD = 1.03;
 // The time at which the last command was received... starts at -Infinity to
 // ensure the next command's timestamp is greater than the initial value,
