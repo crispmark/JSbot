@@ -94,7 +94,7 @@ io.on('connection', function(socket) {
 
     for (var i = socketIndex; i < socketQueue.length; i++) {
       // send the clients the CYCLE_INTERVAL so they know how much to subtract
-      socketQueue[i].emit('update time left', CYCLE_INTERVAL);
+      socketQueue[i].emit('decrease time left', CYCLE_INTERVAL);
     }
 
     console.log('a user disconnected (id:', socket.id, ')');
