@@ -13,11 +13,33 @@ var VirtualJoystick = require('./joystick.js');
 
 var MainPage = React.createClass({
   joystick: undefined,
+  endTime: undefined,
 
   getInitialState: function() {
     return {
-      controls: "dpad"
+      controls: "dpad",
+      timeLeft: 0,
+      controlActive: false
     }
+  },
+  componentWillMount: function() {
+    setInterval(function(){
+      if (endTime) this.setState( {timeLeft: (endTime - Date.now()) / 1000} );
+    }, 500);
+
+    socket.on('control active', function(msg) {
+      endTime = Date.now() + msg.cycleInterval;
+      this.setState( {controlActive: true} );
+    });
+
+    socket.on('control inactive', function(msg) {
+      endTime = Date.now() + msg.timeLeft;
+      this.setState( {controlActive: false} );
+    });
+
+    socket.on('user disconnect', function(msg) {
+      endTime -= msg.cycleInterval;
+    });
   },
   componentDidMount: function() {
     var select = document.querySelector("select");
@@ -53,6 +75,7 @@ var MainPage = React.createClass({
     var header = createHeader.call(this);
     var footer = createFooter();
     var controlPad = getControlPad(this.state.controls);
+    var timerClass = this.state.controlActive ? 'timerActive' : 'timerInactive';
     return(
       <div>
         {header}
@@ -69,7 +92,7 @@ var MainPage = React.createClass({
           </canvas>
           {controlPad}
           <div>
-
+            <h1 className={timerClass}> Time left: {this.state.timeLeft}s </h1>
           </div>
         </main>
         {footer}

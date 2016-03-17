@@ -36,8 +36,9 @@ function cycleSockets() {
 
   // remove the controlling socket and push it to the end of the queue
   var socket = socketQueue.shift();
-  if (socket !== undefined) {
-    socket.emit('turn end'); // tell the old client that their turn is over
+
+  if (socket) {
+    socket.emit('control inactive', {timeLeft: getTimeLeft()}); // tell the old client that their turn is over
     socketQueue.push(socket);
   }
 
@@ -49,8 +50,9 @@ function cycleSockets() {
 
   // if there is still a connected socket, tell them they're in control
   var newSocket = socketQueue[0];
+
   if (newSocket) {
-    newSocket.emit('turn begin');
+    newSocket.emit('control active', {cycleInterval: CYCLE_INTERVAL});
     console.log('id', newSocket.id, 'now controlling...');
   }
 }
@@ -64,15 +66,10 @@ io.on('connection', function(socket) {
     // this is the first connected client, so start the interval and their turn
     interval = setInterval(cycleSockets, CYCLE_INTERVAL);
     lastCycle = Date.now();
-    socket.emit('turn begin');
+    socket.emit('control active', {cycleInterval: CYCLE_INTERVAL});
   }
   else {
-    // calculate amount of time elapsed in current cycle
-    var cycleTimeElapsed = Date.now() - lastCycle;
-
-    // calculate time left until connected client will have their turn
-    var timeLeft = CYCLE_INTERVAL * socketQueue.length - cycleTimeElapsed;
-    socket.emit('time left', timeLeft);
+    socket.emit('control inactive', {timeLeft: getTimeLeft()});
   }
 
   socketQueue.push(socket);
@@ -94,7 +91,7 @@ io.on('connection', function(socket) {
 
     for (var i = socketIndex; i < socketQueue.length; i++) {
       // send the clients the CYCLE_INTERVAL so they know how much to subtract
-      socketQueue[i].emit('decrease time left', CYCLE_INTERVAL);
+      socketQueue[i].emit('user disconnect', {cycleInterval: CYCLE_INTERVAL});
     }
 
     console.log('a user disconnected (id:', socket.id, ')');
@@ -111,6 +108,15 @@ io.on('connection', function(socket) {
     }
   });
 });
+
+function getTimeLeft() {
+  // calculate amount of time elapsed in current cycle
+  var cycleTimeElapsed = Date.now() - lastCycle;
+  // calculate time left until connected client will have their turn
+  var timeLeft = CYCLE_INTERVAL * socketQueue.length - cycleTimeElapsed;
+
+  return timeLeft;
+}
 
 // run the camera socket server
 require('./cameraServer');

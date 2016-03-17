@@ -59,6 +59,14 @@ button, button:active {
   background: url(/img/arrow_right125-active.png) no-repeat;
 }
 
+.timerActive {
+  color: green;
+}
+
+.timerInactive {
+  color: red;
+}
+
 .title {
   margin: 0px;
   padding: 10px;
@@ -109,5 +117,5 @@ select {
     border-radius: 2px;
     margin: 0px 0px;
     transition:all 0.5s ease-in-out;
-  }  
+  }
 }
