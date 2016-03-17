@@ -32,7 +32,9 @@ board.on('ready', function() {
 const SPEED = 160;
 const TURN_SPEED = 160;
 const SPEED_MOD = 1.03;
-//the time at which the last command was received
+// The time at which the last command was received... starts at -Infinity to
+// ensure the next command's timestamp is greater than the initial value,
+// otherwise the command would be blocked to prevent out of order commands.
 var lastCommand = -Infinity;
 
 function runCommand (msg) {
@@ -89,6 +91,8 @@ function calcAngle(dx, dy) {
     return 270 + Math.atan2(absdy, absdx)*360/(2*Math.PI);
   }
 }
+
+// flashes the appropriate LEDs when using joystick mode
 function flashLightAngle(angle) {
   //forward
   if (angle >= 350 || angle <= 10) {
@@ -108,6 +112,7 @@ function flashLightAngle(angle) {
   }
 }
 
+// sets the speed of the motors when using joystick mode
 function customSpeed(dx, dy) {
   var angle = calcAngle(dx, dy);
   flashLightAngle(angle);
@@ -157,6 +162,9 @@ function stop() {
   stopLight()
 }
 
+// Keeping track of light state prevents telling already-blinking lights to
+// start blinking again, which can cause the lights to appear to be stuck on
+// or off when receiving many commands at once.
 var lightState = "forward";
 
 function backLight() {
