@@ -23,10 +23,9 @@ const io = require('socket.io')(http);
 var socketQueue = [];
 // every 30 seconds, cycle the controlling socket to the end of the queue
 setInterval(function(){
-  console.log('before cycle...', socketQueue)
   var socket = socketQueue.shift();
   if (socket !== undefined) socketQueue.push(socket);
-  console.log('after cycle...', socketQueue)
+  console.log('id', socketQueue[0].id, 'now controlling...');
 }, 30000);
 
 // instantiate board and import runCommand()
@@ -35,7 +34,7 @@ const command = require('./robo-commands'); // command definitions
 
 io.on('connection', function(socket) {
   socketQueue.push(socket);
-  console.log('a user connected (id:', socket.id, ')');
+  console.log('a user connected (id:', socket.id, ')...', socketQueue.length, 'current connections');
 
   //listen for commands to robot
   socket.on(command.COMMAND, function(msg) {
