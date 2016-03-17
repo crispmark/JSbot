@@ -20,6 +20,10 @@ http.listen(port, function(){
 
 
 
+// instantiate board and import runCommand()
+const robo    = require('./roboJohnny');
+const command = require('./robo-commands'); // command definitions
+
 // initialize socket listening
 const io = require('socket.io')(http);
 const CYCLE_INTERVAL = 20000;
@@ -36,6 +40,13 @@ function cycleSockets() {
     socket.emit('turn end'); // tell the old client that their turn is over
     socketQueue.push(socket);
   }
+
+  // stop the previous user's command
+  robo.runCommand({
+    command: command.STOP,
+    time: Date.now()
+  });
+  
   // if there is still a connected socket, tell them they're in control
   var newSocket = socketQueue[0];
   if (newSocket) {
@@ -45,10 +56,6 @@ function cycleSockets() {
 }
 
 
-
-// instantiate board and import runCommand()
-const robo    = require('./roboJohnny');
-const command = require('./robo-commands'); // command definitions
 
 io.on('connection', function(socket) {
   var interval;
