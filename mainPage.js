@@ -110,7 +110,7 @@ function createHeader() {
 function createFooter() {
   return (
     <div className="footer">
-        <p className="credits">Created by Philip Rajchot and Mark Crisp</p>
+        <p className="credits">Created by Philip Rajchgot and Mark Crisp</p>
         <p className="credits">for decodeMTL</p>
     </div>
   )
