@@ -12,6 +12,8 @@ var VirtualJoystick = require('./joystick.js');
 
 
 var MainPage = React.createClass({
+  joystick: undefined,
+
   getInitialState: function() {
     return {
       controls: "dpad"
@@ -25,16 +27,17 @@ var MainPage = React.createClass({
     var select = document.querySelector("select");
     select.removeEventListener("change", this.handleSelect);
   },
+
   componentDidUpdate: function() {
-    if(this.state.jstick) {
+    if(this.joystick) {
       if (this.state.controls === "dpad") {
-        this.state.jstick.destroy();
-        this.state.jstick = undefined;
+        this.joystick.destroy();
+        this.joystick = undefined;
       }
     }
     else if (this.state.controls === "joystick") {
       var jstick = addJoystick();
-      this.setState({joystick: jstick});
+      this.joystick = jstick;
     }
   },
 
