@@ -1,12 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import ButtonInterface from './interface.js';
 
 import io from 'socket.io-client';
 import command from './robo-commands.js';
 
 //establish connection to server
 var socket = io.connect();
+var ButtonInterface = require('./interface.js')(socket);
 
 var VirtualJoystick = require('./joystick.js');
 

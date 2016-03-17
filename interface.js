@@ -4,7 +4,7 @@ import io from 'socket.io-client';
 import command from './robo-commands.js';
 
 //establish connection to server
-var socket = io.connect();
+var socket;
 
 //creates a command message to send to the server
 function createCommand(cmd) {
@@ -12,7 +12,9 @@ function createCommand(cmd) {
 }
 
 //button interface for issuing commands to robot
-var ButtonInterface = React.createClass({
+function ButtonInterface(s) {
+  socket = s;
+  return React.createClass({
 
   getInitialState: function() {
     return {activeCommand: undefined};
@@ -108,6 +110,7 @@ var ButtonInterface = React.createClass({
     );
   }
 });
+}
 
 
 //create button to move robot forward
