@@ -132,7 +132,7 @@
 	        { id: 'joystick' },
 	        _react2.default.createElement(
 	          'div',
-	          null,
+	          { className: 'belowHeader' },
 	          _react2.default.createElement(
 	            'main',
 	            null,
