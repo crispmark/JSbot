@@ -29,7 +29,7 @@ var MainPage = React.createClass({
     if(this.state.jstick) {
       if (this.state.controls === "dpad") {
         this.state.jstick.destroy();
-        this.state.setState({joystick: undefined})
+        this.state.jstick = undefined;
       }
     }
     else if (this.state.controls === "joystick") {
