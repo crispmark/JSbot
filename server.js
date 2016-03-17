@@ -61,7 +61,7 @@ io.on('connection', function(socket) {
   }
   else {
     // calculate amount of time elapsed in current cycle
-    var cycleTimeLeft = Date.now() - lastCycle;
+    var cycleTimeElapsed = Date.now() - lastCycle;
 
     // calculate time left until connected client will have their turn
     var timeLeft = CYCLE_INTERVAL * socketQueue.length - cycleTimeElapsed;
