@@ -23,22 +23,23 @@ var MainPage = React.createClass({
     }
   },
   componentWillMount: function() {
+    var component = this;
     setInterval(function(){
-      if (this.endTime) this.setState( {timeLeft: (this.endTime - Date.now()) / 1000} );
+      if (component.endTime) component.setState( {timeLeft: (component.endTime - Date.now()) / 1000} );
     }, 500);
 
     socket.on('control active', function(msg) {
-      this.endTime = Date.now() + msg.cycleInterval;
-      this.setState( {controlActive: true} );
+      component.endTime = Date.now() + msg.cycleInterval;
+      component.setState( {controlActive: true} );
     });
 
     socket.on('control inactive', function(msg) {
-      this.endTime = Date.now() + msg.timeLeft;
-      this.setState( {controlActive: false} );
+      component.endTime = Date.now() + msg.timeLeft;
+      component.setState( {controlActive: false} );
     });
 
     socket.on('user disconnect', function(msg) {
-      this.endTime -= msg.cycleInterval;
+      component.endTime -= msg.cycleInterval;
     });
   },
   componentDidMount: function() {
