@@ -54,10 +54,10 @@ var MainPage = React.createClass({
     var footer = createFooter();
     var controlPad = getControlPad(this.state.controls);
     return(
-      <div>
+      <div className="belowHeader">
         {header}
         <div id="joystick">
-          <div>
+          <div className="belowJoystick">
         <main>
           <canvas id="videoCanvas" width="640" height="480">
             <p>

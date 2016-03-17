@@ -125,14 +125,14 @@
 	    var controlPad = getControlPad(this.state.controls);
 	    return _react2.default.createElement(
 	      'div',
-	      null,
+	      { className: 'belowHeader' },
 	      header,
 	      _react2.default.createElement(
 	        'div',
 	        { id: 'joystick' },
 	        _react2.default.createElement(
 	          'div',
-	          null,
+	          { className: 'belowJoystick' },
 	          _react2.default.createElement(
 	            'main',
 	            null,
