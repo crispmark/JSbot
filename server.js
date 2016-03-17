@@ -21,7 +21,11 @@ http.listen(port, function(){
 // initialize socket and start listening for messages
 const io = require('socket.io')(http);
 var socketQueue = [];
-
+// every 30 seconds, cycle the controlling socket to the end of the queue
+setInterval(function(){
+  var socket = socketQueue.shift();
+  socketQueue.push(socket);
+}, 30000);
 
 // instantiate board and import runCommand()
 const robo    = require('./roboJohnny');
@@ -40,7 +44,10 @@ io.on('connection', function(socket) {
   });
 
   socket.on('disconnect', function(){
-    socketQueue.shift();
+    // find index of disconnected socket in the queue, and remove it
+    var socketIndex = socketQueue.indexOf(socket);
+    socketQueue.splice(socketIndex, 1);
+
     console.log('a user disconnected (id:', socket.id, ')');
 
     robo.runCommand({
