@@ -18,29 +18,58 @@ http.listen(port, function(){
   console.log('listening on *:', port);
 });
 
+
+
 // initialize socket listening
 const io = require('socket.io')(http);
 const CYCLE_INTERVAL = 20000;
 var socketQueue = [];
+var lastCycle = 0; // keeps track of last time sockets were cycled
 
-// every 30 seconds, cycle the controlling socket to the end of the queue
-setInterval(function(){
+// every CYCLE_INTERVAL, cycle the sockets to give someone else control
+function cycleSockets() {
+  lastCycle = Date.now();
+
+  // remove the controlling socket and push it to the end of the queue
   var socket = socketQueue.shift();
   if (socket !== undefined) {
+    socket.emit('turn end'); // tell the old client that their turn is over
     socketQueue.push(socket);
   }
-  // if there is still a connected socket, log their id
-  if (socketQueue[0]) {
-    console.log('id', socketQueue[0].id, 'now controlling...');
+  // if there is still a connected socket, tell them they're in control
+  var newSocket = socketQueue[0];
+  if (newSocket) {
+    newSocket.emit('turn begin');
+    console.log('id', newSocket.id, 'now controlling...');
   }
-}, CYCLE_INTERVAL);
+}
+
+
 
 // instantiate board and import runCommand()
 const robo    = require('./roboJohnny');
 const command = require('./robo-commands'); // command definitions
 
 io.on('connection', function(socket) {
+  var interval;
+
+  if (socketQueue.length === 0) {
+    // this is the first connected client, so start the interval and their turn
+    interval = setInterval(cycleSockets, CYCLE_INTERVAL);
+    lastCycle = Date.now();
+    socket.emit('turn begin');
+  }
+  else {
+    // calculate amount of time elapsed in current cycle
+    var cycleTimeLeft = Date.now() - lastCycle;
+
+    // calculate time left until connected client will have their turn
+    var timeLeft = CYCLE_INTERVAL * socketQueue.length - cycleTimeElapsed;
+    socket.emit('time left', timeleft);
+  }
+
   socketQueue.push(socket);
+
   console.log('a user connected (id:', socket.id, ')...', socketQueue.length, 'current connections');
 
   //listen for commands to robot
@@ -56,12 +85,23 @@ io.on('connection', function(socket) {
     var socketIndex = socketQueue.indexOf(socket);
     socketQueue.splice(socketIndex, 1);
 
+    for (var i = socketIndex; i < socketQueue.length; i++) {
+      // send the clients the CYCLE_INTERVAL so they know how much to subtract
+      socketQueue[i].emit('update time left', CYCLE_INTERVAL);
+    }
+
     console.log('a user disconnected (id:', socket.id, ')');
 
-    robo.runCommand({
-      command: command.STOP,
-      time: Date.now()
-    });
+    if (socketIndex === 0) {
+      robo.runCommand({
+        command: command.STOP,
+        time: Date.now()
+      });
+    }
+
+    if (socketQueue.length === 0) {
+      clearInterval(interval);
+    }
   });
 });
 
