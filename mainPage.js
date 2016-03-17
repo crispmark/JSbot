@@ -6,6 +6,7 @@ import command from './robo-commands.js';
 
 //establish connection to server
 var socket = io.connect();
+console.log(socket.id);
 var ButtonInterface = require('./interface.js')(socket);
 
 var VirtualJoystick = require('./joystick.js');

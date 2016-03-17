@@ -14,6 +14,7 @@ function createCommand(cmd) {
 //button interface for issuing commands to robot
 function ButtonInterface(s) {
   socket = s;
+  console.log(socket.id);
   return React.createClass({
 
   getInitialState: function() {
