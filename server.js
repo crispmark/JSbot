@@ -18,15 +18,22 @@ http.listen(port, function(){
   console.log('listening on *:', port);
 });
 
-// initialize socket and start listening for messages
+// initialize socket listening
 const io = require('socket.io')(http);
+const CYCLE_INTERVAL = 20000;
 var socketQueue = [];
+
 // every 30 seconds, cycle the controlling socket to the end of the queue
 setInterval(function(){
   var socket = socketQueue.shift();
-  if (socket !== undefined) socketQueue.push(socket);
-  console.log('id', socketQueue[0].id, 'now controlling...');
-}, 30000);
+  if (socket !== undefined) {
+    socketQueue.push(socket);
+  }
+  // if there is still a connected socket, log their id
+  if (socketQueue[0]) {
+    console.log('id', socketQueue[0].id, 'now controlling...');
+  }
+}, CYCLE_INTERVAL);
 
 // instantiate board and import runCommand()
 const robo    = require('./roboJohnny');
