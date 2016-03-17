@@ -23,8 +23,10 @@ const io = require('socket.io')(http);
 var socketQueue = [];
 // every 30 seconds, cycle the controlling socket to the end of the queue
 setInterval(function(){
+  console.log('before cycle...', socketQueue)
   var socket = socketQueue.shift();
-  socketQueue.push(socket);
+  if (socket !== undefined) socketQueue.push(socket);
+  console.log('after cycle...', socketQueue)
 }, 30000);
 
 // instantiate board and import runCommand()
