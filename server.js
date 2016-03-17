@@ -36,7 +36,7 @@ setInterval(function(){
 }, CYCLE_INTERVAL);
 
 // instantiate board and import runCommand()
-const robo    = require('./roboJohnny');
+const robo    = require('./robo');
 const command = require('./robo-commands'); // command definitions
 
 io.on('connection', function(socket) {
