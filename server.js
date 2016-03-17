@@ -26,7 +26,7 @@ const command = require('./robo-commands'); // command definitions
 
 // initialize socket listening
 const io = require('socket.io')(http);
-const CYCLE_INTERVAL = 20000;
+const CYCLE_INTERVAL = 60000;
 var socketQueue = [];
 var lastCycle = 0; // keeps track of last time sockets were cycled
 
@@ -46,7 +46,7 @@ function cycleSockets() {
     command: command.STOP,
     time: Date.now()
   });
-  
+
   // if there is still a connected socket, tell them they're in control
   var newSocket = socketQueue[0];
   if (newSocket) {
