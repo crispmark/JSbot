@@ -95,21 +95,21 @@
 	  },
 	  componentWillMount: function componentWillMount() {
 	    setInterval(function () {
-	      if (endTime) this.setState({ timeLeft: (endTime - Date.now()) / 1000 });
+	      if (this.endTime) this.setState({ timeLeft: (this.endTime - Date.now()) / 1000 });
 	    }, 500);
 	
 	    socket.on('control active', function (msg) {
-	      endTime = Date.now() + msg.cycleInterval;
+	      this.endTime = Date.now() + msg.cycleInterval;
 	      this.setState({ controlActive: true });
 	    });
 	
 	    socket.on('control inactive', function (msg) {
-	      endTime = Date.now() + msg.timeLeft;
+	      this.endTime = Date.now() + msg.timeLeft;
 	      this.setState({ controlActive: false });
 	    });
 	
 	    socket.on('user disconnect', function (msg) {
-	      endTime -= msg.cycleInterval;
+	      this.endTime -= msg.cycleInterval;
 	    });
 	  },
 	  componentDidMount: function componentDidMount() {
