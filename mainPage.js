@@ -6,35 +6,76 @@ import command from './robo-commands.js';
 
 //establish connection to server
 var socket = io.connect();
-console.log(socket.id);
 var ButtonInterface = require('./interface.js')(socket);
 
 var VirtualJoystick = require('./joystick.js');
 
-//creates the main page
-function createPage() {
-  var header = createHeader();
-  var footer = createFooter();
-  return (
-    <div>
-      {header}
-      <main id="joystick">
-        <canvas id="videoCanvas" width="640" height="480">
-          <p>
-            Please use a browser that supports the Canvas Element, like
-            <a href="http://www.google.com/chrome">Chrome</a>,
-            <a href="http://www.mozilla.com/firefox/">Firefox</a>,
-            <a href="http://www.apple.com/safari/">Safari</a> or Internet Explorer 10
-          </p>
-        </canvas>
-        <ButtonInterface />
-        <div>
 
-        </div>
-      </main>
-      {footer}
-    </div>
-  )
+var MainPage = React.createClass({
+  getInitialState: function() {
+    return {
+      controls: "dpad"
+    }
+  },
+  componentDidMount: function() {
+    var select = document.querySelector("select");
+    select.addEventListener("change", this.handleSelect);
+  },
+  componentWillUnmount: function() {
+    var select = document.querySelector("select");
+    select.removeEventListener("change", this.handleSelect);
+  },
+  componentDidUpdate: function() {
+    if (this.state.controls === "joystick") {
+      console.log('added joystick');
+      addJoystick();
+    }
+  },
+
+  handleSelect: function(e) {
+    var controls = e.target.options[e.target.selectedIndex].value;
+    console.log(controls)
+    this.setState({controls: controls});
+  },
+
+  render: function() {
+    var header = createHeader.call(this);
+    var footer = createFooter();
+    var controlPad = getControlPad(this.state.controls);
+    return(
+      <div>
+        {header}
+        <div id="joystick">
+          <div>
+        <main>
+          <canvas id="videoCanvas" width="640" height="480">
+            <p>
+              Please use a browser that supports the Canvas Element, like
+              <a href="http://www.google.com/chrome">Chrome</a>,
+              <a href="http://www.mozilla.com/firefox/">Firefox</a>,
+              <a href="http://www.apple.com/safari/">Safari</a> or Internet Explorer 10
+            </p>
+          </canvas>
+          {controlPad}
+          <div>
+
+          </div>
+        </main>
+        {footer}
+      </div>
+      </div>
+      </div>
+    );
+  }
+});
+
+function getControlPad(controls) {
+  switch(controls) {
+    case "dpad":
+    return <ButtonInterface />
+    default:
+    return <div />
+  }
 }
 
 //create the header for the webpage
@@ -42,6 +83,10 @@ function createHeader() {
   return (
     <div className="header">
       <p className="title">JSbot</p>
+      <select onchange={this.handleSelect}>
+        <option value="dpad">D-Pad</option>
+        <option value="joystick">Joystick</option>
+      </select>
     </div>
   )
 }
@@ -58,44 +103,40 @@ function createFooter() {
 
 
 // adds buttons to DOM
-ReactDOM.render(createPage(), document.getElementById('reactcontainer'));
+ReactDOM.render(<MainPage />, document.getElementById('reactcontainer'));
 
-
-var joystick	= new VirtualJoystick({
-  container	: document.getElementById('reactcontainer'),
-  mouseSupport	: true,
-});
-joystick.addEventListener('touchStart', function(){
-  console.log('down')
-})
-joystick.addEventListener('touchEnd', function(){
-  handleUp();
-})
-joystick.addEventListener('touchMove', function(){
-  handleMove();
-})
-joystick.addEventListener('mouseDown', function(){
-  console.log('down')
-})
-joystick.addEventListener('mouseUp', function(){
-  handleUp();
-})
-joystick.addEventListener('mouseMove', function(){
-  handleMove();
-})
-var oldx = 0;
-var oldy = 0;
-function handleMove() {
-  var dx = joystick.deltaX();
-  var dy = joystick.deltaY();
-  if (Math.abs(oldx - dx) > 10 || Math.abs(oldy - dy) > 10) {
-    oldx = dx;
-    oldy = dy;
-    socket.emit(command.COMMAND, {time: Date.now(), command: command.CUSTOM, dx: dx, dy, dy});
-    var txt = 'dx: ' + dx + ' dy: ' + dy;
-    console.log(txt);
+function addJoystick() {
+  var joystick	= new VirtualJoystick({
+    container	: document.getElementById('joystick'),
+    mouseSupport	: true,
+  });
+  joystick.addEventListener('touchEnd', function(){
+    handleUp();
+  })
+  joystick.addEventListener('touchMove', function(){
+    handleMove();
+  })
+  joystick.addEventListener('mouseUp', function(){
+    handleUp();
+  })
+  joystick.addEventListener('mouseMove', function(){
+    handleMove();
+  })
+  var oldx = 0;
+  var oldy = 0;
+  function handleMove() {
+    var dx = joystick.deltaX();
+    var dy = joystick.deltaY();
+    if (Math.abs(oldx - dx) > 10 || Math.abs(oldy - dy) > 10) {
+      oldx = dx;
+      oldy = dy;
+      socket.emit(command.COMMAND, {time: Date.now(), command: command.CUSTOM, dx: dx, dy, dy});
+      var txt = 'dx: ' + dx + ' dy: ' + dy;
+      console.log(txt);
+    }
   }
-}
-function handleUp() {
-  socket.emit(command.COMMAND, {time: Date.now(), command: command.STOP});
+  function handleUp() {
+    socket.emit(command.COMMAND, {time: Date.now(), command: command.STOP});
+  }
+  return joystick;
 }
