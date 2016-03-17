@@ -60,6 +60,14 @@ button, button:active {
   background: url(/img/arrow_right125-active.png) no-repeat;
 }
 
+.timerActive {
+  color: green;
+}
+
+.timerInactive {
+  color: red;
+}
+
 .title {
   margin: 0px;
   padding: 10px;
