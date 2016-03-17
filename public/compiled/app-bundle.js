@@ -84,11 +84,33 @@
 	  displayName: 'MainPage',
 	
 	  joystick: undefined,
+	  endTime: undefined,
 	
 	  getInitialState: function getInitialState() {
 	    return {
-	      controls: "dpad"
+	      controls: "dpad",
+	      timeLeft: 0,
+	      controlActive: false
 	    };
+	  },
+	  componentWillMount: function componentWillMount() {
+	    setInterval(function () {
+	      if (endTime) this.setState({ timeLeft: (endTime - Date.now()) / 1000 });
+	    }, 500);
+	
+	    socket.on('control active', function (msg) {
+	      endTime = Date.now() + msg.cycleInterval;
+	      this.setState({ controlActive: true });
+	    });
+	
+	    socket.on('control inactive', function (msg) {
+	      endTime = Date.now() + msg.timeLeft;
+	      this.setState({ controlActive: false });
+	    });
+	
+	    socket.on('user disconnect', function (msg) {
+	      endTime -= msg.cycleInterval;
+	    });
 	  },
 	  componentDidMount: function componentDidMount() {
 	    var select = document.querySelector("select");
@@ -123,6 +145,7 @@
 	    var header = createHeader.call(this);
 	    var footer = createFooter();
 	    var controlPad = getControlPad(this.state.controls);
+	    var timerClass = this.state.controlActive ? 'timerActive' : 'timerInactive';
 	    return _react2.default.createElement(
 	      'div',
 	      { className: 'belowHeader' },
@@ -164,7 +187,17 @@
 	              )
 	            ),
 	            controlPad,
-	            _react2.default.createElement('div', null)
+	            _react2.default.createElement(
+	              'div',
+	              null,
+	              _react2.default.createElement(
+	                'h1',
+	                { className: timerClass },
+	                ' Time left: ',
+	                this.state.timeLeft,
+	                's '
+	              )
+	            )
 	          ),
 	          footer
 	        )
