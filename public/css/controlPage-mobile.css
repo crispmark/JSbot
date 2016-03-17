@@ -5,6 +5,7 @@ body {
 
 main {
   display: flex;
+  flex-direction: column;
   justify-content: space-around;
   align-items: center;
 }
@@ -12,8 +13,10 @@ main {
 #videoCanvas {
   /* Always stretch the canvas to 640x480, regardless of its
   internal size. */
-  width: 640px;
-  height: 480px;
+  width: auto;
+  height: auto;
+max-width: 100%;
+max-height: 100%;
   border: 2px solid #009688;
   border-radius: 2px;
   margin: 20px 0px;
@@ -88,4 +91,3 @@ select {
   -ms-user-select: none;      /* IE 10+ */
   user-select: none;          /* Likely future */
 }
-Status API Training Shop Blog About
