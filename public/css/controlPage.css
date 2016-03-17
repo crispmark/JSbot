@@ -81,6 +81,7 @@ select {
 
 .belowHeader {
   display: flex;
+flex-direction: column;
 }
 
 .footer {
