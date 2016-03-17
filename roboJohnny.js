@@ -78,6 +78,9 @@ function runCommand (msg) {
 function calcAngle(dx, dy) {
   var absdx = Math.abs(dx);
   var absdy = Math.abs(dy);
+  if (dx === 0 && dy === 0) {
+    return 0;
+  }
   if (dx >= 0 && dy <= 0) {
     return 90 - Math.atan2(absdy, absdx)*360/(2*Math.PI);
   }
