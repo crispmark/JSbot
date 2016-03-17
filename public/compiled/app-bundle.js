@@ -221,7 +221,7 @@
 	    _react2.default.createElement(
 	      'p',
 	      { className: 'credits' },
-	      'Created by Philip Rajchot and Mark Crisp'
+	      'Created by Philip Rajchgot and Mark Crisp'
 	    ),
 	    _react2.default.createElement(
 	      'p',
