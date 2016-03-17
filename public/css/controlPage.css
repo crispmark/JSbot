@@ -27,9 +27,9 @@ main {
 }
 
 button, button:active {
-    border: 0px;
-    width: 125px;
-    height: 125px;
+  border: 0px;
+  width: 125px;
+  height: 125px;
 }
 
 #topButton {
@@ -65,8 +65,15 @@ button, button:active {
   color: white;
   font-family: sans-serif;
 }
-
+select {
+  background-color: #009688;
+  font-size: 14px;
+  color: white;
+  font-family: sans-serif;
+}
 .header {
+  display: flex;
+  justify-content: space-between;
   margin: 0px;
   background-color: #009688;
 }

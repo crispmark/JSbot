@@ -62,15 +62,11 @@
 	
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 	
-	var _interface = __webpack_require__(160);
-	
-	var _interface2 = _interopRequireDefault(_interface);
-	
-	var _socket = __webpack_require__(161);
+	var _socket = __webpack_require__(160);
 	
 	var _socket2 = _interopRequireDefault(_socket);
 	
-	var _roboCommands = __webpack_require__(208);
+	var _roboCommands = __webpack_require__(207);
 	
 	var _roboCommands2 = _interopRequireDefault(_roboCommands);
 	
@@ -80,52 +76,114 @@
 	
 	//establish connection to server
 	var socket = _socket2.default.connect();
+	var ButtonInterface = __webpack_require__(208)(socket);
 	
 	var VirtualJoystick = __webpack_require__(209);
 	
-	//creates the main page
-	function createPage() {
-	  var header = createHeader();
-	  var footer = createFooter();
-	  return _react2.default.createElement(
-	    'div',
-	    null,
-	    header,
-	    _react2.default.createElement(
-	      'main',
-	      { id: 'joystick' },
+	var MainPage = _react2.default.createClass({
+	  displayName: 'MainPage',
+	
+	  joystick: undefined,
+	
+	  getInitialState: function getInitialState() {
+	    return {
+	      controls: "dpad"
+	    };
+	  },
+	  componentDidMount: function componentDidMount() {
+	    var select = document.querySelector("select");
+	    select.addEventListener("change", this.handleSelect);
+	    select.addEventListener("keydown", preventDefault);
+	  },
+	  componentWillUnmount: function componentWillUnmount() {
+	    var select = document.querySelector("select");
+	    select.removeEventListener("change", this.handleSelect);
+	    select.removeEventListener("keydown", preventDefault);
+	  },
+	
+	  componentDidUpdate: function componentDidUpdate() {
+	    if (this.joystick) {
+	      if (this.state.controls === "dpad") {
+	        this.joystick.destroy();
+	        this.joystick = undefined;
+	      }
+	    } else if (this.state.controls === "joystick") {
+	      var jstick = addJoystick();
+	      this.joystick = jstick;
+	    }
+	  },
+	
+	  handleSelect: function handleSelect(e) {
+	    var controls = e.target.options[e.target.selectedIndex].value;
+	    console.log(controls);
+	    this.setState({ controls: controls });
+	  },
+	
+	  render: function render() {
+	    var header = createHeader.call(this);
+	    var footer = createFooter();
+	    var controlPad = getControlPad(this.state.controls);
+	    return _react2.default.createElement(
+	      'div',
+	      null,
+	      header,
 	      _react2.default.createElement(
-	        'canvas',
-	        { id: 'videoCanvas', width: '640', height: '480' },
+	        'div',
+	        { id: 'joystick' },
 	        _react2.default.createElement(
-	          'p',
+	          'div',
 	          null,
-	          'Please use a browser that supports the Canvas Element, like',
 	          _react2.default.createElement(
-	            'a',
-	            { href: 'http://www.google.com/chrome' },
-	            'Chrome'
+	            'main',
+	            null,
+	            _react2.default.createElement(
+	              'canvas',
+	              { id: 'videoCanvas', width: '640', height: '480' },
+	              _react2.default.createElement(
+	                'p',
+	                null,
+	                'Please use a browser that supports the Canvas Element, like',
+	                _react2.default.createElement(
+	                  'a',
+	                  { href: 'http://www.google.com/chrome' },
+	                  'Chrome'
+	                ),
+	                ',',
+	                _react2.default.createElement(
+	                  'a',
+	                  { href: 'http://www.mozilla.com/firefox/' },
+	                  'Firefox'
+	                ),
+	                ',',
+	                _react2.default.createElement(
+	                  'a',
+	                  { href: 'http://www.apple.com/safari/' },
+	                  'Safari'
+	                ),
+	                ' or Internet Explorer 10'
+	              )
+	            ),
+	            controlPad,
+	            _react2.default.createElement('div', null)
 	          ),
-	          ',',
-	          _react2.default.createElement(
-	            'a',
-	            { href: 'http://www.mozilla.com/firefox/' },
-	            'Firefox'
-	          ),
-	          ',',
-	          _react2.default.createElement(
-	            'a',
-	            { href: 'http://www.apple.com/safari/' },
-	            'Safari'
-	          ),
-	          ' or Internet Explorer 10'
+	          footer
 	        )
-	      ),
-	      _react2.default.createElement(_interface2.default, null),
-	      _react2.default.createElement('div', null)
-	    ),
-	    footer
-	  );
+	      )
+	    );
+	  }
+	});
+	
+	function preventDefault(e) {
+	  e.preventDefault();
+	}
+	
+	function getControlPad(controls) {
+	  switch (controls) {
+	    case "dpad":
+	      return _react2.default.createElement(ButtonInterface, null);
+	    default:
+	      return _react2.default.createElement('div', null);
+	  }
 	}
 	
 	//create the header for the webpage
@@ -137,6 +195,20 @@
 	      'p',
 	      { className: 'title' },
 	      'JSbot'
+	    ),
+	    _react2.default.createElement(
+	      'select',
+	      { onchange: this.handleSelect },
+	      _react2.default.createElement(
+	        'option',
+	        { value: 'dpad' },
+	        'D-Pad'
+	      ),
+	      _react2.default.createElement(
+	        'option',
+	        { value: 'joystick' },
+	        'Joystick'
+	      )
 	    )
 	  );
 	}
@@ -149,7 +221,7 @@
 	    _react2.default.createElement(
 	      'p',
 	      { className: 'credits' },
-	      'Created by Philip Rajchot and Mark Crisp'
+	      'Created by Philip Rajchgot and Mark Crisp'
 	    ),
 	    _react2.default.createElement(
 	      'p',
@@ -160,45 +232,42 @@
 	}
 	
 	// adds buttons to DOM
-	_reactDom2.default.render(createPage(), document.getElementById('reactcontainer'));
+	_reactDom2.default.render(_react2.default.createElement(MainPage, null), document.getElementById('reactcontainer'));
 	
-	var joystick = new VirtualJoystick({
-	  container: document.getElementById('reactcontainer'),
-	  mouseSupport: true
-	});
-	joystick.addEventListener('touchStart', function () {
-	  console.log('down');
-	});
-	joystick.addEventListener('touchEnd', function () {
-	  handleUp();
-	});
-	joystick.addEventListener('touchMove', function () {
-	  handleMove();
-	});
-	joystick.addEventListener('mouseDown', function () {
-	  console.log('down');
-	});
-	joystick.addEventListener('mouseUp', function () {
-	  handleUp();
-	});
-	joystick.addEventListener('mouseMove', function () {
-	  handleMove();
-	});
-	var oldx = 0;
-	var oldy = 0;
-	function handleMove() {
-	  var dx = joystick.deltaX();
-	  var dy = joystick.deltaY();
-	  if (Math.abs(oldx - dx) > 10 || Math.abs(oldy - dy) > 10) {
-	    oldx = dx;
-	    oldy = dy;
-	    socket.emit(_roboCommands2.default.COMMAND, _defineProperty({ time: Date.now(), command: _roboCommands2.default.CUSTOM, dx: dx, dy: dy }, 'dy', dy));
-	    var txt = 'dx: ' + dx + ' dy: ' + dy;
-	    console.log(txt);
+	function addJoystick() {
+	  var joystick = new VirtualJoystick({
+	    container: document.getElementById('joystick'),
+	    mouseSupport: true
+	  });
+	  joystick.addEventListener('touchEnd', function () {
+	    handleUp();
+	  });
+	  joystick.addEventListener('touchMove', function () {
+	    handleMove();
+	  });
+	  joystick.addEventListener('mouseUp', function () {
+	    handleUp();
+	  });
+	  joystick.addEventListener('mouseMove', function () {
+	    handleMove();
+	  });
+	  var oldx = 0;
+	  var oldy = 0;
+	  function handleMove() {
+	    var dx = joystick.deltaX();
+	    var dy = joystick.deltaY();
+	    if (Math.abs(oldx - dx) > 10 || Math.abs(oldy - dy) > 10) {
+	      oldx = dx;
+	      oldy = dy;
+	      socket.emit(_roboCommands2.default.COMMAND, _defineProperty({ time: Date.now(), command: _roboCommands2.default.CUSTOM, dx: dx, dy: dy }, 'dy', dy));
+	      var txt = 'dx: ' + dx + ' dy: ' + dy;
+	      console.log(txt);
+	    }
 	  }
-	}
-	function handleUp() {
-	  socket.emit(_roboCommands2.default.COMMAND, { time: Date.now(), command: _roboCommands2.default.STOP });
+	  function handleUp() {
+	    socket.emit(_roboCommands2.default.COMMAND, { time: Date.now(), command: _roboCommands2.default.STOP });
+	  }
+	  return joystick;
 	}
 
 /***/ },
@@ -19806,202 +19875,15 @@
 /* 160 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-	
-	var _react = __webpack_require__(2);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _reactDom = __webpack_require__(159);
-	
-	var _reactDom2 = _interopRequireDefault(_reactDom);
-	
-	var _socket = __webpack_require__(161);
-	
-	var _socket2 = _interopRequireDefault(_socket);
-	
-	var _roboCommands = __webpack_require__(208);
-	
-	var _roboCommands2 = _interopRequireDefault(_roboCommands);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	//establish connection to server
-	var socket = _socket2.default.connect();
-	
-	//creates a command message to send to the server
-	function createCommand(cmd) {
-	  return { time: Date.now(), command: cmd };
-	}
-	
-	//button interface for issuing commands to robot
-	var ButtonInterface = _react2.default.createClass({
-	  displayName: 'ButtonInterface',
-	
-	
-	  getInitialState: function getInitialState() {
-	    return { activeCommand: undefined };
-	  },
-	
-	  //send message to robot server on button press
-	  handlePress: function handlePress(direction) {
-	    if (direction === this.lastButton) return;
-	
-	    this.lastButton = direction;
-	
-	    this.setState({ activeCommand: direction });
-	    socket.emit(_roboCommands2.default.COMMAND, createCommand(direction));
-	  },
-	
-	  lastButton: undefined,
-	
-	  //send message to robot server on keypress,  stop listening to any futher
-	  //key presses until key is released
-	  handleKeyDown: function handleKeyDown(e) {
-	
-	    var code = e.code;
-	
-	    var direction = getDirectionFromKey(code);
-	
-	    if (!direction) return;
-	
-	    this.handlePress(direction);
-	  },
-	
-	  //mouseup always releases button
-	  handleMouseUp: function handleMouseUp() {
-	    this.lastButton = undefined;
-	    this.setState({ activeCommand: undefined });
-	    socket.emit(_roboCommands2.default.COMMAND, createCommand(_roboCommands2.default.STOP));
-	  },
-	
-	  //send message to robot server on button release
-	  handleRelease: function handleRelease(direction) {
-	    if (direction !== this.lastButton) return;
-	
-	    this.lastButton = undefined;
-	    this.setState({ activeCommand: undefined });
-	    socket.emit(_roboCommands2.default.COMMAND, createCommand(_roboCommands2.default.STOP));
-	  },
-	
-	  //send message to robot server on key release, start listening to key presses
-	  //again
-	  handleKeyUp: function handleKeyUp(e) {
-	    var code = e.code;
-	
-	    var direction = getDirectionFromKey(code);
-	    if (!direction) return;
-	
-	    this.handleRelease(direction);
-	  },
-	
-	  //add key listeners on mount
-	  componentWillMount: function componentWillMount() {
-	    document.addEventListener("mouseup", this.handleMouseUp, false);
-	    document.addEventListener("keydown", this.handleKeyDown, false);
-	    document.addEventListener("keyup", this.handleKeyUp, false);
-	  },
-	
-	  //remove key listeners on unmount
-	  componentWillUnmount: function componentWillUnmount() {
-	    document.removeEventListener("mouseup", this.handleMouseUp, false);
-	    document.removeEventListener("keydown", this.handleKeyDown, false);
-	    document.removeEventListener("keyup", this.handleKeyUp, false);
-	  },
-	
-	  render: function render() {
-	    var activeCommand = this.state.activeCommand;
-	    var topButton = createTopButton.call(this, activeCommand);
-	    var bottomButton = createBottomButton.call(this, activeCommand);
-	    var leftButton = createLeftButton.call(this, activeCommand);
-	    var rightButton = createRightButton.call(this, activeCommand);
-	    return _react2.default.createElement(
-	      'div',
-	      { className: 'allButtons' },
-	      _react2.default.createElement(
-	        'div',
-	        { className: 'topButton' },
-	        topButton
-	      ),
-	      _react2.default.createElement(
-	        'div',
-	        { className: 'sideButtons' },
-	        leftButton,
-	        bottomButton,
-	        rightButton
-	      )
-	    );
-	  }
-	});
-	
-	//create button to move robot forward
-	function createTopButton(activeCommand) {
-	  return createButton.call(this, activeCommand, 'topButton', _roboCommands2.default.FORWARD);
-	}
-	
-	//create button to move robot back
-	function createBottomButton(activeCommand) {
-	  return createButton.call(this, activeCommand, 'bottomButton', _roboCommands2.default.REVERSE);
-	}
-	
-	//create button to turn robot left
-	function createLeftButton(activeCommand) {
-	  return createButton.call(this, activeCommand, 'leftButton', _roboCommands2.default.TURN_LEFT);
-	}
-	
-	//create button to turn robot right
-	function createRightButton(activeCommand) {
-	  return createButton.call(this, activeCommand, 'rightButton', _roboCommands2.default.TURN_RIGHT);
-	}
-	
-	//given two strings, the active command and a direction, create an input button
-	//for controlling the robot
-	function createButton(activeCommand, id, direction) {
-	  if (activeCommand === direction) {
-	    id = id + "-active";
-	    return _react2.default.createElement('button', { className: 'activeButton', id: id, onTouchEnd: this.handleRelease.bind(this, direction), onTouchStart: this.handlePress.bind(this, direction), onMouseDown: this.handlePress.bind(this, direction) });
-	  } else {
-	    return _react2.default.createElement('button', { className: 'inactiveButton', id: id, onTouchEnd: this.handleRelease.bind(this, direction), onTouchStart: this.handlePress.bind(this, direction), onMouseDown: this.handlePress.bind(this, direction) });
-	  }
-	}
-	
-	//given a keyboard key, converts to a robot command
-	function getDirectionFromKey(key) {
-	  switch (key) {
-	    case 'KeyW':
-	    case 'ArrowUp':
-	      return _roboCommands2.default.FORWARD;
-	      break;
-	    case 'KeyS':
-	    case 'ArrowDown':
-	      return _roboCommands2.default.REVERSE;
-	      break;
-	    case 'KeyA':
-	    case 'ArrowLeft':
-	      return _roboCommands2.default.TURN_LEFT;
-	      break;
-	    case 'KeyD':
-	    case 'ArrowRight':
-	      return _roboCommands2.default.TURN_RIGHT;
-	      break;
-	  }
-	}
-	
-	module.exports = ButtonInterface;
-
-/***/ },
-/* 161 */
-/***/ function(module, exports, __webpack_require__) {
-
 	
 	/**
 	 * Module dependencies.
 	 */
 	
-	var url = __webpack_require__(162);
-	var parser = __webpack_require__(167);
-	var Manager = __webpack_require__(175);
-	var debug = __webpack_require__(164)('socket.io-client');
+	var url = __webpack_require__(161);
+	var parser = __webpack_require__(166);
+	var Manager = __webpack_require__(174);
+	var debug = __webpack_require__(163)('socket.io-client');
 	
 	/**
 	 * Module exports.
@@ -20083,12 +19965,12 @@
 	 * @api public
 	 */
 	
-	exports.Manager = __webpack_require__(175);
-	exports.Socket = __webpack_require__(201);
+	exports.Manager = __webpack_require__(174);
+	exports.Socket = __webpack_require__(200);
 
 
 /***/ },
-/* 162 */
+/* 161 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {
@@ -20096,8 +19978,8 @@
 	 * Module dependencies.
 	 */
 	
-	var parseuri = __webpack_require__(163);
-	var debug = __webpack_require__(164)('socket.io-client:url');
+	var parseuri = __webpack_require__(162);
+	var debug = __webpack_require__(163)('socket.io-client:url');
 	
 	/**
 	 * Module exports.
@@ -20171,7 +20053,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 163 */
+/* 162 */
 /***/ function(module, exports) {
 
 	/**
@@ -20216,7 +20098,7 @@
 
 
 /***/ },
-/* 164 */
+/* 163 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -20226,7 +20108,7 @@
 	 * Expose `debug()` as the module.
 	 */
 	
-	exports = module.exports = __webpack_require__(165);
+	exports = module.exports = __webpack_require__(164);
 	exports.log = log;
 	exports.formatArgs = formatArgs;
 	exports.save = save;
@@ -20390,7 +20272,7 @@
 
 
 /***/ },
-/* 165 */
+/* 164 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -20406,7 +20288,7 @@
 	exports.disable = disable;
 	exports.enable = enable;
 	exports.enabled = enabled;
-	exports.humanize = __webpack_require__(166);
+	exports.humanize = __webpack_require__(165);
 	
 	/**
 	 * The currently active debug mode names, and names to skip.
@@ -20593,7 +20475,7 @@
 
 
 /***/ },
-/* 166 */
+/* 165 */
 /***/ function(module, exports) {
 
 	/**
@@ -20724,7 +20606,7 @@
 
 
 /***/ },
-/* 167 */
+/* 166 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -20732,12 +20614,12 @@
 	 * Module dependencies.
 	 */
 	
-	var debug = __webpack_require__(164)('socket.io-parser');
-	var json = __webpack_require__(168);
-	var isArray = __webpack_require__(171);
-	var Emitter = __webpack_require__(172);
-	var binary = __webpack_require__(173);
-	var isBuf = __webpack_require__(174);
+	var debug = __webpack_require__(163)('socket.io-parser');
+	var json = __webpack_require__(167);
+	var isArray = __webpack_require__(170);
+	var Emitter = __webpack_require__(171);
+	var binary = __webpack_require__(172);
+	var isBuf = __webpack_require__(173);
 	
 	/**
 	 * Protocol version.
@@ -21130,14 +21012,14 @@
 
 
 /***/ },
-/* 168 */
+/* 167 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(module, global) {/*! JSON v3.3.2 | http://bestiejs.github.io/json3 | Copyright 2012-2014, Kit Cambridge | http://kit.mit-license.org */
 	;(function () {
 	  // Detect the `define` function exposed by asynchronous module loaders. The
 	  // strict `define` check is necessary for compatibility with `r.js`.
-	  var isLoader = "function" === "function" && __webpack_require__(170);
+	  var isLoader = "function" === "function" && __webpack_require__(169);
 	
 	  // A set of types used to distinguish objects from primitives.
 	  var objectTypes = {
@@ -22036,10 +21918,10 @@
 	  }
 	}).call(this);
 	
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(169)(module), (function() { return this; }())))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(168)(module), (function() { return this; }())))
 
 /***/ },
-/* 169 */
+/* 168 */
 /***/ function(module, exports) {
 
 	module.exports = function(module) {
@@ -22055,7 +21937,7 @@
 
 
 /***/ },
-/* 170 */
+/* 169 */
 /***/ function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {module.exports = __webpack_amd_options__;
@@ -22063,7 +21945,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, {}))
 
 /***/ },
-/* 171 */
+/* 170 */
 /***/ function(module, exports) {
 
 	module.exports = Array.isArray || function (arr) {
@@ -22072,7 +21954,7 @@
 
 
 /***/ },
-/* 172 */
+/* 171 */
 /***/ function(module, exports) {
 
 	
@@ -22242,7 +22124,7 @@
 
 
 /***/ },
-/* 173 */
+/* 172 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/*global Blob,File*/
@@ -22251,8 +22133,8 @@
 	 * Module requirements
 	 */
 	
-	var isArray = __webpack_require__(171);
-	var isBuf = __webpack_require__(174);
+	var isArray = __webpack_require__(170);
+	var isBuf = __webpack_require__(173);
 	
 	/**
 	 * Replaces every Buffer | ArrayBuffer in packet with a numbered placeholder.
@@ -22390,7 +22272,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 174 */
+/* 173 */
 /***/ function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {
@@ -22410,7 +22292,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 175 */
+/* 174 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -22418,15 +22300,15 @@
 	 * Module dependencies.
 	 */
 	
-	var eio = __webpack_require__(176);
-	var Socket = __webpack_require__(201);
-	var Emitter = __webpack_require__(202);
-	var parser = __webpack_require__(167);
-	var on = __webpack_require__(204);
-	var bind = __webpack_require__(205);
-	var debug = __webpack_require__(164)('socket.io-client:manager');
-	var indexOf = __webpack_require__(199);
-	var Backoff = __webpack_require__(207);
+	var eio = __webpack_require__(175);
+	var Socket = __webpack_require__(200);
+	var Emitter = __webpack_require__(201);
+	var parser = __webpack_require__(166);
+	var on = __webpack_require__(203);
+	var bind = __webpack_require__(204);
+	var debug = __webpack_require__(163)('socket.io-client:manager');
+	var indexOf = __webpack_require__(198);
+	var Backoff = __webpack_require__(206);
 	
 	/**
 	 * IE6+ hasOwnProperty
@@ -22973,19 +22855,19 @@
 
 
 /***/ },
+/* 175 */
+/***/ function(module, exports, __webpack_require__) {
+
+	
+	module.exports =  __webpack_require__(176);
+
+
+/***/ },
 /* 176 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
-	module.exports =  __webpack_require__(177);
-
-
-/***/ },
-/* 177 */
-/***/ function(module, exports, __webpack_require__) {
-
-	
-	module.exports = __webpack_require__(178);
+	module.exports = __webpack_require__(177);
 	
 	/**
 	 * Exports parser
@@ -22993,25 +22875,25 @@
 	 * @api public
 	 *
 	 */
-	module.exports.parser = __webpack_require__(185);
+	module.exports.parser = __webpack_require__(184);
 
 
 /***/ },
-/* 178 */
+/* 177 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/**
 	 * Module dependencies.
 	 */
 	
-	var transports = __webpack_require__(179);
-	var Emitter = __webpack_require__(172);
-	var debug = __webpack_require__(164)('engine.io-client:socket');
-	var index = __webpack_require__(199);
-	var parser = __webpack_require__(185);
-	var parseuri = __webpack_require__(163);
-	var parsejson = __webpack_require__(200);
-	var parseqs = __webpack_require__(193);
+	var transports = __webpack_require__(178);
+	var Emitter = __webpack_require__(171);
+	var debug = __webpack_require__(163)('engine.io-client:socket');
+	var index = __webpack_require__(198);
+	var parser = __webpack_require__(184);
+	var parseuri = __webpack_require__(162);
+	var parsejson = __webpack_require__(199);
+	var parseqs = __webpack_require__(192);
 	
 	/**
 	 * Module exports.
@@ -23135,9 +23017,9 @@
 	 */
 	
 	Socket.Socket = Socket;
-	Socket.Transport = __webpack_require__(184);
-	Socket.transports = __webpack_require__(179);
-	Socket.parser = __webpack_require__(185);
+	Socket.Transport = __webpack_require__(183);
+	Socket.transports = __webpack_require__(178);
+	Socket.parser = __webpack_require__(184);
 	
 	/**
 	 * Creates transport of the given type.
@@ -23732,17 +23614,17 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 179 */
+/* 178 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/**
 	 * Module dependencies
 	 */
 	
-	var XMLHttpRequest = __webpack_require__(180);
-	var XHR = __webpack_require__(182);
-	var JSONP = __webpack_require__(196);
-	var websocket = __webpack_require__(197);
+	var XMLHttpRequest = __webpack_require__(179);
+	var XHR = __webpack_require__(181);
+	var JSONP = __webpack_require__(195);
+	var websocket = __webpack_require__(196);
 	
 	/**
 	 * Export transports.
@@ -23792,11 +23674,11 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 180 */
+/* 179 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// browser shim for xmlhttprequest module
-	var hasCORS = __webpack_require__(181);
+	var hasCORS = __webpack_require__(180);
 	
 	module.exports = function(opts) {
 	  var xdomain = opts.xdomain;
@@ -23834,7 +23716,7 @@
 
 
 /***/ },
-/* 181 */
+/* 180 */
 /***/ function(module, exports) {
 
 	
@@ -23857,18 +23739,18 @@
 
 
 /***/ },
-/* 182 */
+/* 181 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/**
 	 * Module requirements.
 	 */
 	
-	var XMLHttpRequest = __webpack_require__(180);
-	var Polling = __webpack_require__(183);
-	var Emitter = __webpack_require__(172);
-	var inherit = __webpack_require__(194);
-	var debug = __webpack_require__(164)('engine.io-client:polling-xhr');
+	var XMLHttpRequest = __webpack_require__(179);
+	var Polling = __webpack_require__(182);
+	var Emitter = __webpack_require__(171);
+	var inherit = __webpack_require__(193);
+	var debug = __webpack_require__(163)('engine.io-client:polling-xhr');
 	
 	/**
 	 * Module exports.
@@ -24276,19 +24158,19 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 183 */
+/* 182 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
 	 * Module dependencies.
 	 */
 	
-	var Transport = __webpack_require__(184);
-	var parseqs = __webpack_require__(193);
-	var parser = __webpack_require__(185);
-	var inherit = __webpack_require__(194);
-	var yeast = __webpack_require__(195);
-	var debug = __webpack_require__(164)('engine.io-client:polling');
+	var Transport = __webpack_require__(183);
+	var parseqs = __webpack_require__(192);
+	var parser = __webpack_require__(184);
+	var inherit = __webpack_require__(193);
+	var yeast = __webpack_require__(194);
+	var debug = __webpack_require__(163)('engine.io-client:polling');
 	
 	/**
 	 * Module exports.
@@ -24301,7 +24183,7 @@
 	 */
 	
 	var hasXHR2 = (function() {
-	  var XMLHttpRequest = __webpack_require__(180);
+	  var XMLHttpRequest = __webpack_require__(179);
 	  var xhr = new XMLHttpRequest({ xdomain: false });
 	  return null != xhr.responseType;
 	})();
@@ -24529,15 +24411,15 @@
 
 
 /***/ },
-/* 184 */
+/* 183 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
 	 * Module dependencies.
 	 */
 	
-	var parser = __webpack_require__(185);
-	var Emitter = __webpack_require__(172);
+	var parser = __webpack_require__(184);
+	var Emitter = __webpack_require__(171);
 	
 	/**
 	 * Module exports.
@@ -24690,19 +24572,19 @@
 
 
 /***/ },
-/* 185 */
+/* 184 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/**
 	 * Module dependencies.
 	 */
 	
-	var keys = __webpack_require__(186);
-	var hasBinary = __webpack_require__(187);
-	var sliceBuffer = __webpack_require__(188);
-	var base64encoder = __webpack_require__(189);
-	var after = __webpack_require__(190);
-	var utf8 = __webpack_require__(191);
+	var keys = __webpack_require__(185);
+	var hasBinary = __webpack_require__(186);
+	var sliceBuffer = __webpack_require__(187);
+	var base64encoder = __webpack_require__(188);
+	var after = __webpack_require__(189);
+	var utf8 = __webpack_require__(190);
 	
 	/**
 	 * Check if we are running an android browser. That requires us to use
@@ -24759,7 +24641,7 @@
 	 * Create a blob api even for blob builder when vendor prefixes exist
 	 */
 	
-	var Blob = __webpack_require__(192);
+	var Blob = __webpack_require__(191);
 	
 	/**
 	 * Encodes a packet.
@@ -25291,7 +25173,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 186 */
+/* 185 */
 /***/ function(module, exports) {
 
 	
@@ -25316,7 +25198,7 @@
 
 
 /***/ },
-/* 187 */
+/* 186 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {
@@ -25324,7 +25206,7 @@
 	 * Module requirements.
 	 */
 	
-	var isArray = __webpack_require__(171);
+	var isArray = __webpack_require__(170);
 	
 	/**
 	 * Module exports.
@@ -25381,7 +25263,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 188 */
+/* 187 */
 /***/ function(module, exports) {
 
 	/**
@@ -25416,7 +25298,7 @@
 
 
 /***/ },
-/* 189 */
+/* 188 */
 /***/ function(module, exports) {
 
 	/*
@@ -25481,7 +25363,7 @@
 
 
 /***/ },
-/* 190 */
+/* 189 */
 /***/ function(module, exports) {
 
 	module.exports = after
@@ -25515,7 +25397,7 @@
 
 
 /***/ },
-/* 191 */
+/* 190 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(module, global) {/*! https://mths.be/utf8js v2.0.0 by @mathias */
@@ -25761,10 +25643,10 @@
 	
 	}(this));
 	
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(169)(module), (function() { return this; }())))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(168)(module), (function() { return this; }())))
 
 /***/ },
-/* 192 */
+/* 191 */
 /***/ function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/**
@@ -25867,7 +25749,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 193 */
+/* 192 */
 /***/ function(module, exports) {
 
 	/**
@@ -25910,7 +25792,7 @@
 
 
 /***/ },
-/* 194 */
+/* 193 */
 /***/ function(module, exports) {
 
 	
@@ -25922,7 +25804,7 @@
 	};
 
 /***/ },
-/* 195 */
+/* 194 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -25996,7 +25878,7 @@
 
 
 /***/ },
-/* 196 */
+/* 195 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {
@@ -26004,8 +25886,8 @@
 	 * Module requirements.
 	 */
 	
-	var Polling = __webpack_require__(183);
-	var inherit = __webpack_require__(194);
+	var Polling = __webpack_require__(182);
+	var inherit = __webpack_require__(193);
 	
 	/**
 	 * Module exports.
@@ -26241,19 +26123,19 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 197 */
+/* 196 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/**
 	 * Module dependencies.
 	 */
 	
-	var Transport = __webpack_require__(184);
-	var parser = __webpack_require__(185);
-	var parseqs = __webpack_require__(193);
-	var inherit = __webpack_require__(194);
-	var yeast = __webpack_require__(195);
-	var debug = __webpack_require__(164)('engine.io-client:websocket');
+	var Transport = __webpack_require__(183);
+	var parser = __webpack_require__(184);
+	var parseqs = __webpack_require__(192);
+	var inherit = __webpack_require__(193);
+	var yeast = __webpack_require__(194);
+	var debug = __webpack_require__(163)('engine.io-client:websocket');
 	var BrowserWebSocket = global.WebSocket || global.MozWebSocket;
 	
 	/**
@@ -26265,7 +26147,7 @@
 	var WebSocket = BrowserWebSocket;
 	if (!WebSocket && typeof window === 'undefined') {
 	  try {
-	    WebSocket = __webpack_require__(198);
+	    WebSocket = __webpack_require__(197);
 	  } catch (e) { }
 	}
 	
@@ -26536,13 +26418,13 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 198 */
+/* 197 */
 /***/ function(module, exports) {
 
 	/* (ignored) */
 
 /***/ },
-/* 199 */
+/* 198 */
 /***/ function(module, exports) {
 
 	
@@ -26557,7 +26439,7 @@
 	};
 
 /***/ },
-/* 200 */
+/* 199 */
 /***/ function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/**
@@ -26595,7 +26477,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 201 */
+/* 200 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -26603,13 +26485,13 @@
 	 * Module dependencies.
 	 */
 	
-	var parser = __webpack_require__(167);
-	var Emitter = __webpack_require__(202);
-	var toArray = __webpack_require__(203);
-	var on = __webpack_require__(204);
-	var bind = __webpack_require__(205);
-	var debug = __webpack_require__(164)('socket.io-client:socket');
-	var hasBin = __webpack_require__(206);
+	var parser = __webpack_require__(166);
+	var Emitter = __webpack_require__(201);
+	var toArray = __webpack_require__(202);
+	var on = __webpack_require__(203);
+	var bind = __webpack_require__(204);
+	var debug = __webpack_require__(163)('socket.io-client:socket');
+	var hasBin = __webpack_require__(205);
 	
 	/**
 	 * Module exports.
@@ -27013,7 +26895,7 @@
 
 
 /***/ },
-/* 202 */
+/* 201 */
 /***/ function(module, exports) {
 
 	
@@ -27180,7 +27062,7 @@
 
 
 /***/ },
-/* 203 */
+/* 202 */
 /***/ function(module, exports) {
 
 	module.exports = toArray
@@ -27199,7 +27081,7 @@
 
 
 /***/ },
-/* 204 */
+/* 203 */
 /***/ function(module, exports) {
 
 	
@@ -27229,7 +27111,7 @@
 
 
 /***/ },
-/* 205 */
+/* 204 */
 /***/ function(module, exports) {
 
 	/**
@@ -27258,7 +27140,7 @@
 
 
 /***/ },
-/* 206 */
+/* 205 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {
@@ -27266,7 +27148,7 @@
 	 * Module requirements.
 	 */
 	
-	var isArray = __webpack_require__(171);
+	var isArray = __webpack_require__(170);
 	
 	/**
 	 * Module exports.
@@ -27324,7 +27206,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 207 */
+/* 206 */
 /***/ function(module, exports) {
 
 	
@@ -27415,7 +27297,7 @@
 
 
 /***/ },
-/* 208 */
+/* 207 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -27439,6 +27321,195 @@
 	  REVERSE: REVERSE,
 	  STOP: STOP
 	};
+
+/***/ },
+/* 208 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _react = __webpack_require__(2);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactDom = __webpack_require__(159);
+	
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+	
+	var _socket = __webpack_require__(160);
+	
+	var _socket2 = _interopRequireDefault(_socket);
+	
+	var _roboCommands = __webpack_require__(207);
+	
+	var _roboCommands2 = _interopRequireDefault(_roboCommands);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	//establish connection to server
+	var socket;
+	
+	//creates a command message to send to the server
+	function createCommand(cmd) {
+	  return { time: Date.now(), command: cmd };
+	}
+	
+	//button interface for issuing commands to robot
+	function ButtonInterface(s) {
+	  socket = s;
+	  console.log(socket.id);
+	  return _react2.default.createClass({
+	
+	    getInitialState: function getInitialState() {
+	      return { activeCommand: undefined };
+	    },
+	
+	    //send message to robot server on button press
+	    handlePress: function handlePress(direction) {
+	      if (direction === this.lastButton) return;
+	
+	      this.lastButton = direction;
+	
+	      this.setState({ activeCommand: direction });
+	      socket.emit(_roboCommands2.default.COMMAND, createCommand(direction));
+	    },
+	
+	    lastButton: undefined,
+	
+	    //send message to robot server on keypress,  stop listening to any futher
+	    //key presses until key is released
+	    handleKeyDown: function handleKeyDown(e) {
+	
+	      var code = e.code;
+	
+	      var direction = getDirectionFromKey(code);
+	
+	      if (!direction) return;
+	
+	      this.handlePress(direction);
+	    },
+	
+	    //mouseup always releases button
+	    handleMouseUp: function handleMouseUp() {
+	      this.lastButton = undefined;
+	      this.setState({ activeCommand: undefined });
+	      socket.emit(_roboCommands2.default.COMMAND, createCommand(_roboCommands2.default.STOP));
+	    },
+	
+	    //send message to robot server on button release
+	    handleRelease: function handleRelease(direction) {
+	      if (direction !== this.lastButton) return;
+	
+	      this.lastButton = undefined;
+	      this.setState({ activeCommand: undefined });
+	      socket.emit(_roboCommands2.default.COMMAND, createCommand(_roboCommands2.default.STOP));
+	    },
+	
+	    //send message to robot server on key release, start listening to key presses
+	    //again
+	    handleKeyUp: function handleKeyUp(e) {
+	      var code = e.code;
+	
+	      var direction = getDirectionFromKey(code);
+	      if (!direction) return;
+	
+	      this.handleRelease(direction);
+	    },
+	
+	    //add key listeners on mount
+	    componentWillMount: function componentWillMount() {
+	      document.addEventListener("mouseup", this.handleMouseUp, false);
+	      document.addEventListener("keydown", this.handleKeyDown, false);
+	      document.addEventListener("keyup", this.handleKeyUp, false);
+	    },
+	
+	    //remove key listeners on unmount
+	    componentWillUnmount: function componentWillUnmount() {
+	      document.removeEventListener("mouseup", this.handleMouseUp, false);
+	      document.removeEventListener("keydown", this.handleKeyDown, false);
+	      document.removeEventListener("keyup", this.handleKeyUp, false);
+	    },
+	
+	    render: function render() {
+	      var activeCommand = this.state.activeCommand;
+	      var topButton = createTopButton.call(this, activeCommand);
+	      var bottomButton = createBottomButton.call(this, activeCommand);
+	      var leftButton = createLeftButton.call(this, activeCommand);
+	      var rightButton = createRightButton.call(this, activeCommand);
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'allButtons' },
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'topButton' },
+	          topButton
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'sideButtons' },
+	          leftButton,
+	          bottomButton,
+	          rightButton
+	        )
+	      );
+	    }
+	  });
+	}
+	
+	//create button to move robot forward
+	function createTopButton(activeCommand) {
+	  return createButton.call(this, activeCommand, 'topButton', _roboCommands2.default.FORWARD);
+	}
+	
+	//create button to move robot back
+	function createBottomButton(activeCommand) {
+	  return createButton.call(this, activeCommand, 'bottomButton', _roboCommands2.default.REVERSE);
+	}
+	
+	//create button to turn robot left
+	function createLeftButton(activeCommand) {
+	  return createButton.call(this, activeCommand, 'leftButton', _roboCommands2.default.TURN_LEFT);
+	}
+	
+	//create button to turn robot right
+	function createRightButton(activeCommand) {
+	  return createButton.call(this, activeCommand, 'rightButton', _roboCommands2.default.TURN_RIGHT);
+	}
+	
+	//given two strings, the active command and a direction, create an input button
+	//for controlling the robot
+	function createButton(activeCommand, id, direction) {
+	  if (activeCommand === direction) {
+	    id = id + "-active";
+	    return _react2.default.createElement('button', { className: 'activeButton', id: id, onTouchEnd: this.handleRelease.bind(this, direction), onTouchStart: this.handlePress.bind(this, direction), onMouseDown: this.handlePress.bind(this, direction) });
+	  } else {
+	    return _react2.default.createElement('button', { className: 'inactiveButton', id: id, onTouchEnd: this.handleRelease.bind(this, direction), onTouchStart: this.handlePress.bind(this, direction), onMouseDown: this.handlePress.bind(this, direction) });
+	  }
+	}
+	
+	//given a keyboard key, converts to a robot command
+	function getDirectionFromKey(key) {
+	  switch (key) {
+	    case 'KeyW':
+	    case 'ArrowUp':
+	      return _roboCommands2.default.FORWARD;
+	      break;
+	    case 'KeyS':
+	    case 'ArrowDown':
+	      return _roboCommands2.default.REVERSE;
+	      break;
+	    case 'KeyA':
+	    case 'ArrowLeft':
+	      return _roboCommands2.default.TURN_LEFT;
+	      break;
+	    case 'KeyD':
+	    case 'ArrowRight':
+	      return _roboCommands2.default.TURN_RIGHT;
+	      break;
+	  }
+	}
+	
+	module.exports = ButtonInterface;
 
 /***/ },
 /* 209 */
