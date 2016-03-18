@@ -27,7 +27,7 @@ var MainPage = React.createClass({
     setInterval(function(){
       if (component.endTime) {
         component.setState({
-          timeLeft: Math.trunc( (component.endTime) / 1000 )
+          timeLeft: Math.trunc( (component.endTime - Date.now()) / 1000 )
         });
       }
     }, 500);
