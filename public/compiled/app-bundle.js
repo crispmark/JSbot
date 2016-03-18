@@ -104,7 +104,7 @@
 	    }, 500);
 	
 	    socket.on('timeUpdate', function (msg) {
-	      component.endTime = msg.time;
+	      component.endTime = msg.time + Date.now();
 	      component.setState({ controlActive: msg.control });
 	    });
 	  },

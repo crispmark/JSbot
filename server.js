@@ -127,7 +127,7 @@ function updateAll() {
 // returns time left in current cycle
 function getTimeLeft(position) {
   // calculate amount of time elapsed in current cycle
-  var switchTime = Date.now() - lastCycle;
+  var switchTime = CYCLE_INTERVAL - (Date.now() - lastCycle);
   // calculate time left until connected client will have their turn
   if (position === 0) {
     return switchTime
