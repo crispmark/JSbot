@@ -65,7 +65,7 @@ button, button:active {
   padding: 10px;
   font-size: 22px;
   font-family: sans-serif;
-  color: lawngreen;
+  color: #aeea00;
 }
 
 .timerInactive {
@@ -73,7 +73,7 @@ button, button:active {
   padding: 10px;
   font-size: 22px;
   font-family: sans-serif;
-  color: red;
+  color: #f44336;
 }
 
 .title {
