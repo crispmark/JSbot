@@ -43,11 +43,11 @@ var MainPage = React.createClass({
     });
 
     socket.on('user disconnect', function(msg) {
-      if ( (component.endTime - msg.cycleInterval) > 0 ) {
-        component.endTime = component.endTime - msg.cycleInterval;
+      if ( (component.endTime - msg.timeToSubtract) > 0 ) {
+        component.endTime = component.endTime - msg.timeToSubtract;
       }
       else {
-        component.endTime = Date.now() + msg.cycleInterval;
+        component.endTime = Date.now() + msg.timeToSubtract;
       }
     });
   },
