@@ -52,15 +52,19 @@ function cycleSockets() {
 
 
 
+var interval;
 io.on('connection', function(socket) {
-  var interval;
   var position = socketQueue.length;
   socketQueue.push(socket);
 
   //first user connect
   if (position === 0) {
     // this is the first connected client, so start the interval and their turn
+
     interval = setInterval(cycleSockets, CYCLE_INTERVAL);
+    console.log("\n\n\n\n\n\n\n\n\n\n\n")
+    console.log(interval)
+    console.log("\n\n\n\n\n\n\n\n\n\n\n")
     lastCycle = Date.now();
     socket.emit(TIME_UPDATE, {control: true, time: getTimeLeft(position)})
   }
@@ -90,11 +94,15 @@ io.on('connection', function(socket) {
         command: command.STOP,
         time: Date.now()
       });
-
+      console.log("\n\n\n\n\n\n\n\n\n\n\n")
+      console.log(interval)
+      console.log("\n\n\n\n\n\n\n\n\n\n\n")
       clearInterval(interval);
-      interval = setInterval(cycleSockets, CYCLE_INTERVAL);
-      lastCycle = Date.now();
-      updateAfter(0);
+      if (socketQueue.length !== 0) {
+        interval = setInterval(cycleSockets, CYCLE_INTERVAL);
+        lastCycle = Date.now();
+        updateAfter(0);
+      }
     }
     //other user disco
     else {
