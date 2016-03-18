@@ -27,6 +27,7 @@ const command = require('./robo-commands'); // command definitions
 // initialize socket listening
 const io = require('socket.io')(http);
 const CYCLE_INTERVAL = 60000;
+const TIME_UPDATE = 'timeUpdate';
 var socketQueue = [];
 var lastCycle = 0; // keeps track of last time sockets were cycled
 
@@ -61,18 +62,20 @@ function cycleSockets() {
 
 io.on('connection', function(socket) {
   var interval;
+  var position = socketQueue.length;
+  socketQueue.push(socket);
 
-  if (socketQueue.length === 0) {
+  //first user connect
+  if (position === 0) {
     // this is the first connected client, so start the interval and their turn
     interval = setInterval(cycleSockets, CYCLE_INTERVAL);
     lastCycle = Date.now();
-    socket.emit('control active', {cycleInterval: CYCLE_INTERVAL});
+    socket.emit(TIME_UPDATE, {control: true, time: getTimeLeft(position)})
   }
+  //other user connect
   else {
-    socket.emit('control inactive', {timeLeft: getTimeLeft()});
+    socket.emit(TIME_UPDATE, {control: false, time: getTimeLeft(position)})
   }
-
-  socketQueue.push(socket);
 
   console.log('a user connected (id:', socket.id, ')...', socketQueue.length, 'current connections');
 
@@ -87,34 +90,24 @@ io.on('connection', function(socket) {
   socket.on('disconnect', function(){
     // find index of disconnected socket in the queue, and remove it
     var socketIndex = socketQueue.indexOf(socket);
+    //remove socket from queue
     socketQueue.splice(socketIndex, 1);
-
+    //first user disco
     if (socketIndex === 0) {
       robo.runCommand({
         command: command.STOP,
         time: Date.now()
       });
 
-      io.emit('user disconnect', {timeToSubtract: CYCLE_INTERVAL - (Date.now() - lastCycle)});
-
-      var newSocket = socketQueue[0];
-
-      if (newSocket) {
-        newSocket.emit('control active', {cycleInterval: CYCLE_INTERVAL});
-        console.log('id', newSocket.id, 'now controlling...');
-      }
-
       clearInterval(interval);
       interval = setInterval(cycleSockets, CYCLE_INTERVAL);
       lastCycle = Date.now();
+      updateAll();
     }
+    //other user disco
     else {
-      for (var i = socketIndex; i < socketQueue.length; i++) {
-        // send the clients the CYCLE_INTERVAL so they know how much to subtract
-        socketQueue[i].emit('user disconnect', {timeToSubtract: CYCLE_INTERVAL});
-      }
+      updateAll();
     }
-
     if (socketQueue.length === 0) {
       clearInterval(interval);
     }
@@ -123,14 +116,25 @@ io.on('connection', function(socket) {
   });
 });
 
-// returns time left in current cycle
-function getTimeLeft() {
-  // calculate amount of time elapsed in current cycle
-  var cycleTimeElapsed = Date.now() - lastCycle;
-  // calculate time left until connected client will have their turn
-  var timeLeft = CYCLE_INTERVAL * socketQueue.length - cycleTimeElapsed;
+//updates all users of their current time left
+function updateAll() {
+  for (var i = 0; i < socketQueue.length; i++) {
+    var control = (i === 0);
+    socketQueue[i].emit(TIME_UPDATE, {control: control, time: getTimeLeft(i)} )
+  }
+}
 
-  return timeLeft;
+// returns time left in current cycle
+function getTimeLeft(position) {
+  // calculate amount of time elapsed in current cycle
+  var switchTime = CYCLE_INTERVAL + lastCycle - Date.now();
+  // calculate time left until connected client will have their turn
+  if (position === 0) {
+    return switchTime
+  }
+  else {
+    return switchTime + CYCLE_INTERVAL*(position - 1)
+  }
 }
 
 // run the camera socket server

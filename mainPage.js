@@ -27,28 +27,14 @@ var MainPage = React.createClass({
     setInterval(function(){
       if (component.endTime) {
         component.setState({
-          timeLeft: Math.trunc( (component.endTime - Date.now()) / 1000 )
+          timeLeft: Math.trunc( (component.endTime) / 1000 )
         });
       }
     }, 500);
 
-    socket.on('control active', function(msg) {
-      component.endTime = Date.now() + msg.cycleInterval;
-      component.setState( {controlActive: true} );
-    });
-
-    socket.on('control inactive', function(msg) {
-      component.endTime = Date.now() + msg.timeLeft;
-      component.setState( {controlActive: false} );
-    });
-
-    socket.on('user disconnect', function(msg) {
-      if ( (component.endTime - msg.timeToSubtract) > 0 ) {
-        component.endTime = component.endTime - msg.timeToSubtract;
-      }
-      else {
-        component.endTime = Date.now() + msg.timeToSubtract;
-      }
+    socket.on('timeUpdate', function(msg) {
+      component.endTime = msg.time;
+      component.setState( {controlActive: msg.control} );
     });
   },
   componentDidMount: function() {
