@@ -40,7 +40,7 @@ function cycleSockets() {
 
   if (socket) {
     socketQueue.push(socket);
-    updateAll(0);
+    updateAfter(0);
   }
 
   // stop the previous user's command
@@ -94,7 +94,7 @@ io.on('connection', function(socket) {
       clearInterval(interval);
       interval = setInterval(cycleSockets, CYCLE_INTERVAL);
       lastCycle = Date.now();
-      updateAll(0);
+      updateAfter(0);
     }
     //other user disco
     else {
