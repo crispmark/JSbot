@@ -100,9 +100,6 @@ io.on('connection', function(socket) {
     else {
       updateAfter(socketIndex);
     }
-    if (socketQueue.length === 0) {
-      clearInterval(interval);
-    }
 
     console.log('a user disconnected (id:', socket.id, ')');
   });
