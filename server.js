@@ -40,7 +40,7 @@ function cycleSockets() {
 
   if (socket) {
     socketQueue.push(socket);
-    updateAll();
+    updateAll(0);
   }
 
   // stop the previous user's command
@@ -94,11 +94,11 @@ io.on('connection', function(socket) {
       clearInterval(interval);
       interval = setInterval(cycleSockets, CYCLE_INTERVAL);
       lastCycle = Date.now();
-      updateAll();
+      updateAll(0);
     }
     //other user disco
     else {
-      updateAll();
+      updateAfter(socketIndex);
     }
     if (socketQueue.length === 0) {
       clearInterval(interval);
@@ -109,8 +109,8 @@ io.on('connection', function(socket) {
 });
 
 //updates all users of their current time left
-function updateAll() {
-  for (var i = 0; i < socketQueue.length; i++) {
+function updateAfter(n) {
+  for (var i = n; i < socketQueue.length; i++) {
     var control = (i === 0);
     socketQueue[i].emit(TIME_UPDATE, {control: control, time: getTimeLeft(i)} )
   }
