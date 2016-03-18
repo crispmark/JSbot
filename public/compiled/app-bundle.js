@@ -96,7 +96,11 @@
 	  componentWillMount: function componentWillMount() {
 	    var component = this;
 	    setInterval(function () {
-	      if (component.endTime) component.setState({ timeLeft: (component.endTime - Date.now()) / 1000 });
+	      if (component.endTime) {
+	        component.setState({
+	          timeLeft: Math.trunc((component.endTime - Date.now()) / 1000)
+	        });
+	      }
 	    }, 500);
 	
 	    socket.on('control active', function (msg) {
@@ -110,7 +114,11 @@
 	    });
 	
 	    socket.on('user disconnect', function (msg) {
-	      component.endTime -= msg.cycleInterval;
+	      if (component.endTime - msg.cycleInterval > 0) {
+	        component.endTime = component.endTime - msg.cycleInterval;
+	      } else {
+	        component.endTime = Date.now() + msg.cycleInterval;
+	      }
 	    });
 	  },
 	  componentDidMount: function componentDidMount() {
@@ -146,7 +154,6 @@
 	    var header = createHeader.call(this);
 	    var footer = createFooter();
 	    var controlPad = getControlPad(this.state.controls);
-	    var timerClass = this.state.controlActive ? 'timerActive' : 'timerInactive';
 	    return _react2.default.createElement(
 	      'div',
 	      { className: 'belowHeader' },
@@ -187,18 +194,7 @@
 	                ' or Internet Explorer 10'
 	              )
 	            ),
-	            controlPad,
-	            _react2.default.createElement(
-	              'div',
-	              null,
-	              _react2.default.createElement(
-	                'h1',
-	                { className: timerClass },
-	                ' Time left: ',
-	                this.state.timeLeft,
-	                's '
-	              )
-	            )
+	            controlPad
 	          ),
 	          footer
 	        )
@@ -222,6 +218,7 @@
 	
 	//create the header for the webpage
 	function createHeader() {
+	  var timerClass = this.state.controlActive ? 'timerActive' : 'timerInactive';
 	  return _react2.default.createElement(
 	    'div',
 	    { className: 'header' },
@@ -229,6 +226,17 @@
 	      'p',
 	      { className: 'title' },
 	      'JSbot'
+	    ),
+	    _react2.default.createElement(
+	      'div',
+	      null,
+	      _react2.default.createElement(
+	        'h1',
+	        { className: timerClass },
+	        ' Time left: ',
+	        this.state.timeLeft,
+	        's '
+	      )
 	    ),
 	    _react2.default.createElement(
 	      'select',

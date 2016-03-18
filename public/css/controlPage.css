@@ -61,10 +61,12 @@ button, button:active {
 }
 
 .timerActive {
+  font-family: sans-serif;
   color: green;
 }
 
 .timerInactive {
+  font-family: sans-serif;
   color: red;
 }
 

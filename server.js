@@ -89,26 +89,41 @@ io.on('connection', function(socket) {
     var socketIndex = socketQueue.indexOf(socket);
     socketQueue.splice(socketIndex, 1);
 
-    for (var i = socketIndex; i < socketQueue.length; i++) {
-      // send the clients the CYCLE_INTERVAL so they know how much to subtract
-      socketQueue[i].emit('user disconnect', {cycleInterval: CYCLE_INTERVAL});
-    }
-
-    console.log('a user disconnected (id:', socket.id, ')');
-
     if (socketIndex === 0) {
       robo.runCommand({
         command: command.STOP,
         time: Date.now()
       });
+
+      io.emit('user disconnect', {timeToSubtract: CYCLE_INTERVAL - (Date.now() - lastCycle)});
+
+      var newSocket = socketQueue[0];
+
+      if (newSocket) {
+        newSocket.emit('control active', {cycleInterval: CYCLE_INTERVAL});
+        console.log('id', newSocket.id, 'now controlling...');
+      }
+
+      clearInterval(interval);
+      interval = setInterval(cycleSockets, CYCLE_INTERVAL);
+      lastCycle = Date.now();
+    }
+    else {
+      for (var i = socketIndex; i < socketQueue.length; i++) {
+        // send the clients the CYCLE_INTERVAL so they know how much to subtract
+        socketQueue[i].emit('user disconnect', {timeToSubtract: CYCLE_INTERVAL});
+      }
     }
 
     if (socketQueue.length === 0) {
       clearInterval(interval);
     }
+
+    console.log('a user disconnected (id:', socket.id, ')');
   });
 });
 
+// returns time left in current cycle
 function getTimeLeft() {
   // calculate amount of time elapsed in current cycle
   var cycleTimeElapsed = Date.now() - lastCycle;

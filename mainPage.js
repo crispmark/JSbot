@@ -25,7 +25,11 @@ var MainPage = React.createClass({
   componentWillMount: function() {
     var component = this;
     setInterval(function(){
-      if (component.endTime) component.setState( {timeLeft: (component.endTime - Date.now()) / 1000} );
+      if (component.endTime) {
+        component.setState({
+          timeLeft: Math.trunc( (component.endTime - Date.now()) / 1000 )
+        });
+      }
     }, 500);
 
     socket.on('control active', function(msg) {
@@ -39,7 +43,12 @@ var MainPage = React.createClass({
     });
 
     socket.on('user disconnect', function(msg) {
-      component.endTime -= msg.cycleInterval;
+      if ( (component.endTime - msg.cycleInterval) > 0 ) {
+        component.endTime = component.endTime - msg.cycleInterval;
+      }
+      else {
+        component.endTime = Date.now() + msg.cycleInterval;
+      }
     });
   },
   componentDidMount: function() {
@@ -76,7 +85,6 @@ var MainPage = React.createClass({
     var header = createHeader.call(this);
     var footer = createFooter();
     var controlPad = getControlPad(this.state.controls);
-    var timerClass = this.state.controlActive ? 'timerActive' : 'timerInactive';
     return(
       <div className="belowHeader">
         {header}
@@ -92,9 +100,6 @@ var MainPage = React.createClass({
             </p>
           </canvas>
           {controlPad}
-          <div>
-            <h1 className={timerClass}> Time left: {this.state.timeLeft}s </h1>
-          </div>
         </main>
         {footer}
       </div>
@@ -119,9 +124,13 @@ function getControlPad(controls) {
 
 //create the header for the webpage
 function createHeader() {
+  var timerClass = this.state.controlActive ? 'timerActive' : 'timerInactive';
   return (
     <div className="header">
       <p className="title">JSbot</p>
+      <div>
+        <h1 className={timerClass}> Time left: {this.state.timeLeft}s </h1>
+      </div>
       <select onchange={this.handleSelect}>
         <option value="dpad">D-Pad</option>
         <option value="joystick">Joystick</option>
