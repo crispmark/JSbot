@@ -60,11 +60,7 @@ io.on('connection', function(socket) {
   //first user connect
   if (position === 0) {
     // this is the first connected client, so start the interval and their turn
-
     interval = setInterval(cycleSockets, CYCLE_INTERVAL);
-    console.log("\n\n\n\n\n\n\n\n\n\n\n")
-    console.log(interval)
-    console.log("\n\n\n\n\n\n\n\n\n\n\n")
     lastCycle = Date.now();
     socket.emit(TIME_UPDATE, {control: true, time: getTimeLeft(position)})
   }
@@ -94,10 +90,9 @@ io.on('connection', function(socket) {
         command: command.STOP,
         time: Date.now()
       });
-      console.log("\n\n\n\n\n\n\n\n\n\n\n")
-      console.log(interval)
-      console.log("\n\n\n\n\n\n\n\n\n\n\n")
+
       clearInterval(interval);
+
       if (socketQueue.length !== 0) {
         interval = setInterval(cycleSockets, CYCLE_INTERVAL);
         lastCycle = Date.now();
@@ -113,7 +108,7 @@ io.on('connection', function(socket) {
   });
 });
 
-//updates all users of their current time left
+//updates time left of all users after position N in the socketQueue
 function updateAfter(n) {
   for (var i = n; i < socketQueue.length; i++) {
     var control = (i === 0);

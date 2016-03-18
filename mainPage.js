@@ -110,12 +110,23 @@ function getControlPad(controls) {
 
 //create the header for the webpage
 function createHeader() {
-  var timerClass = this.state.controlActive ? 'timerActive' : 'timerInactive';
+  var timerClass;
+  var timerText;
+
+  if (this.state.controlActive) {
+    timerClass = 'timerActive';
+    timerText = 'Your turn ends in: ';
+  }
+  else {
+    timerClass = 'timerInactive';
+    timerText = 'Your turn begins in: ';
+  }
+
   return (
     <div className="header">
       <p className="title">JSbot</p>
       <div>
-        <h1 className={timerClass}> Time left: {this.state.timeLeft}s </h1>
+        <p className={timerClass}> {timerText} {this.state.timeLeft}s </p>
       </div>
       <select onchange={this.handleSelect}>
         <option value="dpad">D-Pad</option>

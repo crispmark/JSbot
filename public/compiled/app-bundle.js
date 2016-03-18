@@ -205,7 +205,17 @@
 	
 	//create the header for the webpage
 	function createHeader() {
-	  var timerClass = this.state.controlActive ? 'timerActive' : 'timerInactive';
+	  var timerClass;
+	  var timerText;
+	
+	  if (this.state.controlActive) {
+	    timerClass = 'timerActive';
+	    timerText = 'Your turn ends in: ';
+	  } else {
+	    timerClass = 'timerInactive';
+	    timerText = 'Your turn begins in: ';
+	  }
+	
 	  return _react2.default.createElement(
 	    'div',
 	    { className: 'header' },
@@ -218,9 +228,11 @@
 	      'div',
 	      null,
 	      _react2.default.createElement(
-	        'h1',
+	        'p',
 	        { className: timerClass },
-	        ' Time left: ',
+	        ' ',
+	        timerText,
+	        ' ',
 	        this.state.timeLeft,
 	        's '
 	      )
