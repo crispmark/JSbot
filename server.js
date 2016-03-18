@@ -39,8 +39,8 @@ function cycleSockets() {
   var socket = socketQueue.shift();
 
   if (socket) {
-    socket.emit('control inactive', {timeLeft: getTimeLeft()}); // tell the old client that their turn is over
     socketQueue.push(socket);
+    updateAll();
   }
 
   // stop the previous user's command
@@ -48,14 +48,6 @@ function cycleSockets() {
     command: command.STOP,
     time: Date.now()
   });
-
-  // if there is still a connected socket, tell them they're in control
-  var newSocket = socketQueue[0];
-
-  if (newSocket) {
-    newSocket.emit('control active', {cycleInterval: CYCLE_INTERVAL});
-    console.log('id', newSocket.id, 'now controlling...');
-  }
 }
 
 
