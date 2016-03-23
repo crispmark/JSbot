@@ -18,7 +18,9 @@ Raspberry Pi Setup:
 
 [Install Arch Linux](https://archlinuxarm.org/platforms/armv7/broadcom/raspberry-pi-2)
 
-Install ffmpeg and Node.js on the Raspberry Pi
+Install ffmpeg, wiringpi and Node.js on the Raspberry Pi
+
+Follow the instructions for [enabling i2c](https://wiki.archlinux.org/index.php/Raspberry_Pi#I2C) and [setting up the camera](https://wiki.archlinux.org/index.php/Raspberry_Pi#Raspberry_Pi_camera_module)
 
 Clone this repository, run npm install, and then sudo node server
 
